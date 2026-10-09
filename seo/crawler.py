@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-from main import url
 
 def  crawl(url):
     headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}

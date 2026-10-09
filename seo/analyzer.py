@@ -1,11 +1,11 @@
-from crawler import crawl
-from main import soup
+from seo.crawler import crawl
+
 
 def analyze(soup):
     issues=[]
     if soup is None:
         print("Analiz yapılamıyor çünkü sayfa içeriği alınamadı.")
-        return
+        return ["Sayfa içeriği alınamadı."]
 
     title_tag=soup.find("title")
     if not title_tag:
