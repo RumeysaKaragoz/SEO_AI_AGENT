@@ -1,7 +1,7 @@
 import os
-
+from datetime import datetime
 from seo.crawler import crawl
-from seo.analyzer import analyze
+from seo.analyzer import check_seo
 
 if __name__ == "__main__":
     target_url = input("Analiz etmek istediğiniz web sayfasının URL'sini girin:")
@@ -11,7 +11,7 @@ if __name__ == "__main__":
     soup = crawl(target_url)
     if soup:
         print("Analiz ediliyor...")
-        reports = analyze(soup)
+        reports = check_seo(soup)
         report_content = f"URL: {target_url}\nTarih: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\nSEO Analiz Sonuçları:\n"
         if reports:
             print("SEO Analiz Sonuçları:")
