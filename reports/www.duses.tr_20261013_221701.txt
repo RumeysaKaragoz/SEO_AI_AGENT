@@ -1,0 +1,176 @@
+URL: https://www.duses.tr/
+Tarih: 2026-10-13 22:17:01
+
+ÖZET
+- Analiz edilen sayfa: 14
+- Sorun bulunan sayfa: 14
+- Toplam sorun: 112
+
+
+============================================================
+
+Sayfa: https://www.duses.tr
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/entry_slider_image_3.jpg?revision=8.4.4.0-5-1790578764)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/entry_slider_image_2.jpg?revision=8.4.4.0-5-1790578764)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/entry_slider_image_1.jpg?revision=8.4.4.0-5-1790578764)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/koleksiyon
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/ust-giyim
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/atlet
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/bluz
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/body
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/bustiyer
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/crop
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/gomlek
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/hirka
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/kazak
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/sweat
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/t-shirt
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/triko
+- Uyarı: <title> etiketi 10 karakterden kısa.
+- Eksik: Sayfada <h1> etiketi bulunamadı.
+- Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
+- Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)

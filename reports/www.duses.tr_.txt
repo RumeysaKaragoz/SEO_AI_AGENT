@@ -1,11 +1,11 @@
 URL: https://www.duses.tr/
-Tarih: 2026-10-11 14:18:49
+Tarih: 2026-10-13 14:55:12
 
 SEO Analiz Sonuçları:
 - Eksik: Sayfada <h1> etiketi bulunamadı.
 - Uyarı: <img> etiketi için alt metin eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
-- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/entry_slider_image_2.jpg?revision=8.4.4.0-5-1790578764)
 - Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/entry_slider_image_3.jpg?revision=8.4.4.0-5-1790578764)
+- Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/entry_slider_image_2.jpg?revision=8.4.4.0-5-1790578764)
 - Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/entry_slider_image_1.jpg?revision=8.4.4.0-5-1790578764)
 - Uyarı: <img> etiketi için alt metin eksik. (src: //www.duses.tr/idea/rx/01/themes/selftpl_699306778711b/assets/uploads/footer_ssl_image.webp?revision=8.4.4.0-5-1790578764)
 - Uyarı: <a> etiketi için geçersiz href özniteliği (src: #!)
