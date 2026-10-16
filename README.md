@@ -119,7 +119,13 @@ The crawler receives a target URL and retrieves the webpage's HTML when the requ
 
 BeautifulSoup is used to parse the HTML and extract information needed by the analysis process.
 
-As the crawler evolves, it will discover internal links and maintain a collection of URLs to visit. The planned initial limit for a site-wide crawl is 100 pages.
+The crawler starts from the target URL and discovers internal pages through links. It uses three structures:
+
+- `queue`: URLs waiting to be crawled (first in, first out)
+- `seen_urls`: every URL that has ever been added to the queue, so no URL is queued twice
+- `visited_urls`: URLs taken from the queue for processing
+
+The crawl stops when the queue is empty or 100 pages have been processed. Only same-domain HTML pages are followed.
 
 ### Step 2 — Data extraction
 
@@ -169,14 +175,29 @@ The project follows a modular design so that crawling, analysis, rule definition
 
 ### Current core modules
 
-| Module        | Responsibility                                                                     |
-| ------------- | ---------------------------------------------------------------------------------- |
-| `crawler.py`  | Retrieves webpage content and provides the collected data to the analysis process. |
-| `analyzer.py` | Processes page data and evaluates SEO-related information.                         |
-| `rules.py`    | Contains reusable rules and checks for identifying potential SEO issues.           |
-| TXT report    | Presents analysis findings in a readable text format.                              |
+| Module        | Responsibility                                                                                   |
+| `main.py`     | Entry point. Takes the target URL, runs the crawl, analyzes each page and writes the TXT report. |
+| `crawler.py`  | Fetches pages and performs a site-wide crawl (up to 100 internal pages) using a URL queue.       |
+| `analyzer.py` | Processes page data and evaluates SEO-related information.                                       |
+| `rules.py`    | Contains reusable rules and checks for identifying potential SEO issues.                         |
+| TXT report    | Presents analysis findings in a readable text format.                                            |
 
 The precise responsibilities of each module will evolve as the implementation becomes more comprehensive.
+
+### Project structure
+
+```text
+project/
+├── main.py
+├── requirements.txt
+├── README.md
+├── reports/
+└── seo/
+    ├── __init__.py
+    ├── crawler.py
+    ├── analyzer.py
+    └── rules.py
+```
 
 ### Planned architecture
 
@@ -462,19 +483,11 @@ source .venv/bin/activate
 
 ### Install dependencies
 
-If the current implementation uses `requests` and `beautifulsoup4`, install them with:
-
-```bash
-pip install requests beautifulsoup4
-```
-
-If the repository includes a `requirements.txt` file, use:
-
 ```bash
 pip install -r requirements.txt
 ```
 
-The dependency list should match the actual project files.
+The current dependencies are `requests` and `beautifulsoup4`.
 
 ### Run the project
 
