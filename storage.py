@@ -1,4 +1,5 @@
 """Analiz sonuçlarını veritabanına yazan yardımcı fonksiyonlar."""
+import json
 from urllib.parse import urlparse
 
 
@@ -39,8 +40,8 @@ def save_page(connection, run_id, result, data=None):
         INSERT INTO pages (
             crawl_run_id, url, status_code, error_message,
             title, meta_description, h1_count, h1_text,
-            image_count, images_missing_alt, content_text
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            image_count, images_missing_alt, content_text, extra_data
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             run_id, result["url"], result["status_code"], result["error"],
@@ -48,6 +49,7 @@ def save_page(connection, run_id, result, data=None):
             data.get("h1_count"), data.get("h1_text"),
             data.get("image_count"), data.get("images_missing_alt"),
             data.get("content_text"),
+            json.dumps({"content_hash": data["content_hash"]}) if data else None,
         ),
     )
     return cursor.lastrowid

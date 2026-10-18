@@ -3,7 +3,7 @@ from datetime import datetime
 from urllib.parse import urlparse
 
 from database import DB_PATH, get_connection, init_db
-from seo.analyzer import check_seo
+from seo.analyzer import check_duplicates, check_seo, check_site
 from seo.crawler import crawl_site
 from seo.extractor import extract_page_data
 from storage import (
@@ -17,6 +17,7 @@ from storage import (
 
 MAX_PAGES = 100
 SEVERITY_LABELS = {"critical": "KRİTİK", "warning": "UYARI", "info": "BİLGİ"}
+SEVERITY_ORDER = {"critical": 0, "warning": 1, "info": 2}
 
 
 def build_report(target_url, entries):
@@ -29,6 +30,10 @@ def build_report(target_url, entries):
     failed = [e for e in entries if e["error"] is not None]
     pages_with_issues = sum(1 for e in analyzed if e["issues"])
     total_issues = sum(len(e["issues"]) for e in analyzed)
+    by_severity = {sev: 0 for sev in SEVERITY_ORDER}
+    for e in analyzed:
+        for i in e["issues"]:
+            by_severity[i["severity"]] += 1
 
     sections = []
     for e in entries:
@@ -36,9 +41,8 @@ def build_report(target_url, entries):
         if e["error"] is not None:
             lines.append(f"- Erişilemedi: {e['error']}")
         elif e["issues"]:
-            lines.extend(
-                f"- [{SEVERITY_LABELS[i['severity']]}] {i['message']}" for i in e["issues"]
-            )
+            ordered = sorted(e["issues"], key=lambda i: SEVERITY_ORDER[i["severity"]])
+            lines.extend(f"- [{SEVERITY_LABELS[i['severity']]}] {i['message']}" for i in ordered)
         else:
             lines.append("- Sorun bulunamadı.")
         sections.append("\n".join(lines))
@@ -50,7 +54,8 @@ def build_report(target_url, entries):
         f"- Analiz edilen sayfa: {len(analyzed)}\n"
         f"- Erişilemeyen sayfa: {len(failed)}\n"
         f"- Sorun bulunan sayfa: {pages_with_issues}\n"
-        f"- Toplam sorun: {total_issues}\n"
+        f"- Toplam sorun: {total_issues} "
+        f"(Kritik: {by_severity['critical']}, Uyarı: {by_severity['warning']}, Bilgi: {by_severity['info']})\n"
     )
     separator = "\n\n" + "=" * 60 + "\n\n"
     return header + separator + separator.join(sections) + "\n"
@@ -68,20 +73,31 @@ def run(target_url, max_pages=MAX_PAGES, db_path=DB_PATH, reports_dir="reports",
         try:
             results = crawl_site(target_url, max_pages=max_pages, delay=delay)
 
-            # Her sayfa için analiz BİR kez çalışır; sonuç hem DB'ye hem rapora gider.
+            
             entries = []
             for result in results:
                 soup = result["soup"]
-                data = extract_page_data(soup) if soup is not None else None
-                issues = check_seo(soup) if soup is not None else []
-                page_id = save_page(connection, run_id, result, data)
-                save_issues(connection, page_id, issues)
                 entries.append({
                     "url": result["url"],
                     "status_code": result["status_code"],
                     "error": result["error"],
-                    "issues": issues,
+                    "result": result,
+                    "data": extract_page_data(soup) if soup is not None else None,
+                    "issues": check_seo(soup) if soup is not None else [],
                 })
+
+            
+            ok_entries = [e for e in entries if e["error"] is None]
+            by_url = {e["url"]: e for e in ok_entries}
+            for url, found in check_duplicates(ok_entries).items():
+                by_url[url]["issues"].extend(found)
+            if ok_entries: 
+                ok_entries[0]["issues"].extend(check_site(site_origin(target_url)))
+
+           
+            for e in entries:
+                page_id = save_page(connection, run_id, e["result"], e["data"])
+                save_issues(connection, page_id, e["issues"])
             connection.commit()
 
             report_content = build_report(target_url, entries)

@@ -1,6 +1,7 @@
-"""Sayfadan HAM veri çıkarır (pages tablosuna yazılacak alanlar). Kural yargısı içermez."""
+import hashlib
 
-CONTENT_LIMIT = 5000  # content_text için en fazla karakter
+CONTENT_LIMIT = 5000     
+MIN_HASH_LENGTH = 50      
 _SKIP_PARENTS = {"script", "style", "noscript", "title"}
 
 
@@ -14,7 +15,10 @@ def extract_page_data(soup):
     parts = (
         s.strip() for s in body.find_all(string=True) if s.parent.name not in _SKIP_PARENTS
     )
-    text = " ".join(p for p in parts if p)
+    full_text = " ".join(p for p in parts if p)
+    content_hash = None
+    if len(full_text) >= MIN_HASH_LENGTH:
+        content_hash = hashlib.sha1(full_text.lower().encode("utf-8")).hexdigest()
 
     return {
         "title": title_tag.get_text(strip=True) if title_tag else None,
@@ -22,7 +26,7 @@ def extract_page_data(soup):
         "h1_count": len(h1_tags),
         "h1_text": h1_tags[0].get_text(strip=True) if h1_tags else None,
         "image_count": len(images),
-        # check_images ile aynı tanım: alt yok ya da boş
-        "images_missing_alt": sum(1 for img in images if not img.get("alt")),
-        "content_text": text[:CONTENT_LIMIT],
+        "images_missing_alt": sum(1 for img in images if img.get("alt") is None),
+        "content_text": full_text[:CONTENT_LIMIT],
+        "content_hash": content_hash,  
     }

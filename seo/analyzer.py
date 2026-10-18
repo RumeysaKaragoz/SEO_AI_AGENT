@@ -5,12 +5,12 @@ from seo.rules import (
     check_headings,
     check_images,
     check_links,
-    check_redirects,
-    check_canonicalization,
-    check_duplicate_content,
-    check_internationalization,
+    check_canonical,
+    check_open_graph,
+    check_twitter_cards,
+    check_schema_markup,
 )
-
+from seo.site_rules import check_site, check_duplicates 
 
 CHECKS = [
     check_title,
@@ -18,18 +18,17 @@ CHECKS = [
     check_headings,
     check_images,
     check_links,
-    check_redirects,
-    check_canonicalization,
-    check_duplicate_content,
-    check_internationalization,
+    check_canonical,
+    check_open_graph,
+    check_twitter_cards,
+    check_schema_markup,
 ]
 
 
 def check_seo(soup):
-    """her sorun make_issue sözlüğüdür"""
+    
     if soup is None:
-        return [make_issue("PAGE_CONTENT_MISSING", "technical", "critical",
-                           "Sayfa içeriği alınamadı.")]
+        return [make_issue("PAGE_CONTENT_MISSING", "technical", "Sayfa içeriği alınamadı.")]
     issues = []
     for check in CHECKS:
         issues.extend(check(soup))
