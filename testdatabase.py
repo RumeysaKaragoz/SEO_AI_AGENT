@@ -2,7 +2,7 @@ import os
 import sqlite3
 import tempfile
 
-from database import get_connection, init_db
+from database import MIGRATIONS, get_connection, get_schema_version, init_db
 
 
 def expect_error(connection, sql, params=()):
@@ -30,8 +30,10 @@ def main():
         "VALUES (1, 'https://example.com/a', 200, 'Kısa', 0, 3, 2)"
     )
     conn.execute(
-        "INSERT INTO pages (crawl_run_id, url, status_code) VALUES (1, 'https://example.com/b', 404)"
+        "INSERT INTO pages (crawl_run_id, url, status_code, error_message) "
+        "VALUES (1, 'https://example.com/b', NULL, 'Timeout')"
     )
+    conn.execute("UPDATE pages SET content_text = 'Örnek sayfa metni' WHERE id = 1")
     conn.execute(
         "INSERT INTO issues (page_id, code, category, severity, message) "
         "VALUES (1, 'H1_MISSING', 'on-page', 'critical', 'Sayfada <h1> yok')"
@@ -45,8 +47,8 @@ def main():
         "VALUES (1, 1, 'test-model', 'Title genişletilmeli')"
     )
     conn.execute(
-        "INSERT INTO applied_changes (page_id, ai_report_id, change_type, old_value, new_value) "
-        "VALUES (1, 1, 'title', 'Kısa', 'Daha açıklayıcı bir başlık')"
+        "INSERT INTO applied_changes (page_id, issue_id, ai_report_id, change_type, old_value, new_value) "
+        "VALUES (1, 2, 1, 'title', 'Kısa', 'Daha açıklayıcı bir başlık')"
     )
     conn.commit()
     print("OK  zincir oluşturuldu")
@@ -67,6 +69,16 @@ def main():
         ("https://example.com", "https://example.com/a", "TITLE_SHORT", "warning"),
     ], rows
     print("OK  JOIN sorgusu doğru sonuç verdi")
+
+    linked = conn.execute(
+        "SELECT i.code FROM applied_changes c JOIN issues i ON i.id = c.issue_id"
+    ).fetchall()
+    assert linked == [("TITLE_SHORT",)], linked
+    print("OK  değişiklik -> çözdüğü sorun bağı çalışıyor")
+
+    err = conn.execute("SELECT error_message FROM pages WHERE id = 2").fetchone()[0]
+    assert err == "Timeout"
+    print("OK  ulaşılamayan sayfa hata mesajıyla kaydedildi")
 
     # --- Kısıtlar
     expect_error(conn, "INSERT INTO pages (crawl_run_id, url) VALUES (999, 'x')")
@@ -98,6 +110,12 @@ def main():
     assert ref is None
     print("OK  ai_report silinince applied_changes korundu (SET NULL)")
 
+    # issue silinirse değişiklik kaydı kalır, issue_id NULL olur
+    conn.execute("DELETE FROM issues WHERE id = 2")
+    ref = conn.execute("SELECT issue_id FROM applied_changes WHERE id = 1").fetchone()[0]
+    assert ref is None
+    print("OK  issue silinince applied_changes korundu (SET NULL)")
+
     # Değişiklik kaydı yoksa sayfa silinince issues da silinir
     conn.execute("DELETE FROM applied_changes")
     conn.execute("DELETE FROM pages WHERE id = 1")
@@ -106,6 +124,40 @@ def main():
     print("OK  sayfa silinince issues da silindi (CASCADE)")
 
     conn.close()
+
+    # --- Şema sürümü
+    check = get_connection(db_path)
+    assert get_schema_version(check) == len(MIGRATIONS) == 1
+    check.close()
+    print("OK  şema sürümü 1, tekrar init_db() sürümü bozmadı")
+
+    # --- Eski tarz veritabanı (yalnızca sites + crawl_runs, sürüm 0) yükseltilebiliyor mu?
+    old_path = os.path.join(tempfile.mkdtemp(), "old.db")
+    old = sqlite3.connect(old_path)
+    old.executescript(
+        """
+        CREATE TABLE sites (id INTEGER PRIMARY KEY, url TEXT UNIQUE NOT NULL,
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+        CREATE TABLE crawl_runs (id INTEGER PRIMARY KEY, site_id INTEGER NOT NULL,
+                   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, ended_at TIMESTAMP,
+                   status TEXT NOT NULL, pages_crawled INTEGER DEFAULT 0, report_path TEXT,
+                   FOREIGN KEY (site_id) REFERENCES sites (id));
+        INSERT INTO sites (url) VALUES ('https://eski-site.com');
+        INSERT INTO crawl_runs (site_id, status) VALUES (1, 'completed');
+        """
+    )
+    old.commit()
+    old.close()
+    init_db(old_path)
+    up = get_connection(old_path)
+    assert up.execute("SELECT url FROM sites").fetchall() == [("https://eski-site.com",)]
+    assert up.execute("SELECT COUNT(*) FROM crawl_runs").fetchone()[0] == 1
+    tables = {r[0] for r in up.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    assert {"pages", "issues", "ai_reports", "applied_changes"} <= tables
+    assert get_schema_version(up) == 1
+    up.close()
+    print("OK  eski veritabanı yükseltildi, mevcut veriler korundu")
+
     print("\nTüm testler geçti.")
 
 

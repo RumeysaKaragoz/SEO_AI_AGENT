@@ -13,19 +13,34 @@ SKIP_EXTENSIONS = (
 )
 
 
-def crawl(url, timeout=10):
-    """Tek bir sayfayı indirip BeautifulSoup nesnesi döndürür (hata olursa None)."""
+def fetch_page(url, timeout=10):
+    """
+    Tek bir sayfayı indirir ve sonucu HER durumda bir sözlük olarak döndürür:
+      {"url": ..., "status_code": int | None, "soup": BeautifulSoup | None, "error": str | None}
+    Başarılı HTML sayfalarında soup dolu, error None'dır.
+    """
+    result = {"url": url, "status_code": None, "soup": None, "error": None}
     try:
         response = requests.get(url, headers=HEADERS, timeout=timeout)
-        if response.status_code != 200:
-            print(f"Hata: Sayfaya ulaşılamadı. Status Code: {response.status_code} ({url})")
-            return None
-        if "text/html" not in response.headers.get("Content-Type", ""):
-            return None  # HTML olmayan içerikleri atla
-        return BeautifulSoup(response.text, "html.parser")
     except requests.RequestException as e:
+        result["error"] = f"{type(e).__name__}: {e}"
         print(f"Bir hata oluştu: {e} ({url})")
-        return None
+        return result
+
+    result["status_code"] = response.status_code
+    if response.status_code != 200:
+        result["error"] = f"HTTP {response.status_code}"
+        print(f"Hata: Sayfaya ulaşılamadı. Status Code: {response.status_code} ({url})")
+    elif "text/html" not in response.headers.get("Content-Type", ""):
+        result["error"] = "HTML olmayan içerik"
+    else:
+        result["soup"] = BeautifulSoup(response.text, "html.parser")
+    return result
+
+
+def crawl(url, timeout=10):
+    """Tek sayfa için eski arayüz: BeautifulSoup döndürür (hata olursa None)."""
+    return fetch_page(url, timeout)["soup"]
 
 
 def normalize_url(url):
@@ -53,37 +68,40 @@ def crawl_site(start_url, max_pages=100, delay=0.5):
     seen_urls    : kuyruğa bir kez eklenmiş tüm URL'ler (tekrar eklemeyi önler)
     visited_urls : kuyruktan alınıp işlenen URL'ler
 
-    Dönüş: {url: soup} sözlüğü (başarıyla indirilen sayfalar)
+    Dönüş: fetch_page sonuçlarının listesi (tarama sırasıyla). Başarısız sayfalar
+    da listede yer alır (soup=None, status_code/error dolu).
     """
     start_url = normalize_url(start_url)
     base_domain = urlparse(start_url).netloc
 
-    queue = deque([start_url])   # list yerine deque: baştan çıkarma O(1)
+    queue = deque([start_url])
     seen_urls = {start_url}
     visited_urls = set()
-    pages = {}
+    results = []
 
     while queue and len(visited_urls) < max_pages:
         current_url = queue.popleft()
         visited_urls.add(current_url)
 
         print(f"[{len(visited_urls)}/{max_pages}] Taranıyor: {current_url}")
-        soup = crawl(current_url)
-        if soup is None:
-            continue
-        pages[current_url] = soup
+        result = fetch_page(current_url)
+        results.append(result)
 
-        for a in soup.find_all("a", href=True):
-            link = normalize_url(urljoin(current_url, a["href"]))
-            if link in seen_urls or not is_valid_link(link, base_domain):
-                continue
-            seen_urls.add(link)
-            queue.append(link)
+        soup = result["soup"]
+        if soup is not None:
+            for a in soup.find_all("a", href=True):
+                link = normalize_url(urljoin(current_url, a["href"]))
+                if link in seen_urls or not is_valid_link(link, base_domain):
+                    continue
+                seen_urls.add(link)
+                queue.append(link)
 
-        time.sleep(delay)  # siteyi yormamak için kısa bekleme
+        if delay:
+            time.sleep(delay)
 
+    ok = sum(1 for r in results if r["soup"] is not None)
     print(
         f"\nTarama bitti. İşlenen: {len(visited_urls)}, "
-        f"başarılı: {len(pages)}, kuyrukta kalan: {len(queue)}"
+        f"başarılı: {ok}, kuyrukta kalan: {len(queue)}"
     )
-    return pages
+    return results
