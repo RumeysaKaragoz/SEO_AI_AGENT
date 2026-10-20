@@ -5,7 +5,14 @@ from urllib.parse import urljoin, urlparse, urldefrag
 import requests
 from bs4 import BeautifulSoup
 
-HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+import random
+
+USER_AGENTS = [
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2.1 Safari/605.1.15",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:123.0) Gecko/20100101 Firefox/123.0",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36"
+]
 SKIP_EXTENSIONS = (
     ".jpg", ".jpeg", ".png", ".gif", ".svg", ".webp", ".ico",
     ".pdf", ".zip", ".rar", ".mp3", ".mp4", ".avi",
@@ -20,15 +27,20 @@ def fetch_page(url, timeout=10):
     Başarılı HTML sayfalarında soup dolu, error None'dır.
     """
     result = {"url": url, "status_code": None, "soup": None, "error": None}
+    headers = {"User-Agent": random.choice(USER_AGENTS)}
     try:
-        response = requests.get(url, headers=HEADERS, timeout=timeout)
+        response = requests.get(url, headers=headers, timeout=timeout)
     except requests.RequestException as e:
         result["error"] = f"{type(e).__name__}: {e}"
         print(f"Bir hata oluştu: {e} ({url})")
         return result
 
     result["status_code"] = response.status_code
-    if response.status_code != 200:
+    if response.status_code == 429:
+        result["error"] = "HTTP 429 Too Many Requests"
+        print(f"⚠️ Çok fazla istek atıldı (429), 15 saniye bekleniyor... ({url})")
+        time.sleep(15)
+    elif response.status_code != 200:
         result["error"] = f"HTTP {response.status_code}"
         print(f"Hata: Sayfaya ulaşılamadı. Status Code: {response.status_code} ({url})")
     elif "text/html" not in response.headers.get("Content-Type", ""):
@@ -97,7 +109,8 @@ def crawl_site(start_url, max_pages=100, delay=0.5):
                 queue.append(link)
 
         if delay:
-            time.sleep(delay)
+            actual_delay = random.uniform(delay, delay * 2.0)
+            time.sleep(actual_delay)
 
     ok = sum(1 for r in results if r["soup"] is not None)
     print(
