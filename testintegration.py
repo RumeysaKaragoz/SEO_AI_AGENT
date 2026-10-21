@@ -16,7 +16,7 @@ PAGES = {
         <a href="http://baska-site.example/x">Dış</a> <a href="mailto:a@b.c">Mail</a>
         <a href="#top">Üst</a> <a href="#">Menü</a> <a href="/logo.png">Logo</a> <a href="/c.html">C</a></body></html>""",
     "a.html": """<html><head></head><body><h1>Bir</h1><h1>İki</h1>
-        <img src="x.jpg"><img src="y.jpg" alt="var"><img src="z.jpg" alt=""><a href="/index.html">Ana</a></body></html>""",
+        <img src="x.jpg"><img src="y.jpg" alt="var"><img src="z.jpg" alt=""><noscript><img src="https://fb.example/tr?id=1&noscript=1" width="1" height="1"></noscript><a href="/index.html">Ana</a></body></html>""",
     "b.html": """<html><head><title>B sayfası, yeterince uzun</title></head>
         <body><h1>B</h1><p>Bu sayfanın metni en az elli karakter olmalı ki içerik karşılaştırılsın.</p>
         <a href="/a.html">A</a><a href="/index.html">tekrar</a></body></html>""",

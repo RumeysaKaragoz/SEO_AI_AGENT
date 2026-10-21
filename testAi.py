@@ -54,8 +54,8 @@ class FakeModel:
 
     def __call__(self, model, messages, schema):
         system = messages[0]["content"]
-        field = "title" if "ALAN: title" in system else "meta_description"
-        user = messages[1]["content"]
+        field = "title" if "alan: title" in system else "meta_description"
+        user = messages[-1]["content"]
         page = "urun" if "/urun/" in user else "kategori"
         key = (page, field)
         n = sum(1 for c in self.calls if c[:2] == key)
@@ -75,7 +75,7 @@ def test_validate():
     assert "uzun" in ok("title", "A" * 60 + "b")[1]
     assert "HTML" in ok("title", "<b>İthal Kürklü Mont</b> 9009")[1]
     assert "aynı" in ok("title", "ithal kürklü ekose tasarım mont 9009", old="İTHAL KÜRKLÜ EKOSE TASARIM MONT 9009")[1]
-    assert "BÜYÜK" in ok("title", "İTHAL KÜRKLÜ EKOSE MONT 9009")[1]
+    assert "büyük harf" in ok("title", "İTHAL KÜRKLÜ EKOSE MONT 9009")[1]
     assert "sayı" in ok("meta_description", "İthal kürklü ekose tasarım mont 9009 şimdi sadece 7990 TL ile sizlerle, hemen inceleyin.")[1]
     assert "'indirim'" in ok("meta_description", "İthal kürklü ekose tasarım mont 9009 modelinde büyük indirim fırsatını kaçırmayın hemen.")[1]
     assert ok("meta_description", "İthal kürklü ekose tasarım mont 9009 modelini lacivert renkte inceleyin ve hemen sipariş verin.")[1] is None
@@ -131,8 +131,26 @@ def test_pipeline():
     cat_user = [c_[3] for c_ in model.calls if c_[0] == "kategori"][0]
     assert "güvenilir kesit yok" in cat_user
     retry_user = [c_[3] for c_ in model.calls if c_[:3] == ("urun", "meta_description", 1)][0]
-    assert "ÖNCEKİ ÖNERİ REDDEDİLDİ" in retry_user and "sayı" in retry_user
+    assert "Önceki öneri reddedildi" in retry_user and "sayı" in retry_user
     print("OK  istem: menü kırpıldı, H1 yoksa kesit verilmedi, ret nedeni yeniden denemede modele iletildi")
+
+    # İstem yapısı: örnek konuşma var, istemde tamamen büyük harfli kelime yok (model bu tonu taklit ediyor)
+    import re
+    from ai import build_messages
+    page = {"id": 1, "url": "https://s.com/urun/x", "title": "Mont", "meta_description": None,
+            "h1_text": None, "content_text": ""}
+    for field in ("title", "meta_description"):
+        msgs = build_messages(field, page, [{"message": "kısa"}], 41, " | Marka",
+                              previous_error="çok fazla büyük harf kullanılmış; yalnızca cümle başları büyük olmalı")
+        assert [m["role"] for m in msgs] == ["system", "user", "assistant", "user"], msgs
+        # Talimatlar (system), örnek cevap (assistant) ve ret mesajı büyük harfli kelime içermemeli.
+        # Örnek GİRDİ büyük harfli olabilir: model onu normal yazıma çevirmeyi öğrenir.
+        checked = msgs[0]["content"] + " " + msgs[2]["content"] + " " + msgs[3]["content"].split("Önceki")[-1]
+        shouting = set(re.findall(r"\b[A-ZÇĞİÖŞÜ]{5,}\b", checked))
+        assert not shouting, shouting
+        example = json.loads(msgs[2]["content"])
+        assert not example["value"].isupper() and example["value"] != example["value"].upper()
+    print("OK  istem: örnek konuşma var, talimatlarda 'bağıran' büyük harfli kelime yok")
 
     # Tekrar çalıştırma: onaylı/bekleyen alanlar yeniden üretilmez
     before = c.execute("SELECT COUNT(*) FROM applied_changes").fetchone()[0]

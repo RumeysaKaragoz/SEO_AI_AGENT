@@ -1,7 +1,10 @@
+"""Sayfadan HAM veri çıkarır (pages tablosuna yazılacak alanlar). Kural yargısı içermez."""
 import hashlib
 
-CONTENT_LIMIT = 5000     
-MIN_HASH_LENGTH = 50      
+from seo.rules import content_images
+
+CONTENT_LIMIT = 5000      # content_text için en fazla karakter
+MIN_HASH_LENGTH = 50      # bundan kısa metinlerde içerik karşılaştırması anlamsız (boş/yükleniyor sayfaları)
 _SKIP_PARENTS = {"script", "style", "noscript", "title"}
 
 
@@ -9,7 +12,7 @@ def extract_page_data(soup):
     title_tag = soup.find("title")
     meta_desc = soup.find("meta", attrs={"name": "description"})
     h1_tags = soup.find_all("h1")
-    images = soup.find_all("img")
+    images = content_images(soup)  # check_images ile aynı tanım (<noscript> piksel görselleri hariç)
 
     body = soup.body or soup
     parts = (
@@ -26,7 +29,8 @@ def extract_page_data(soup):
         "h1_count": len(h1_tags),
         "h1_text": h1_tags[0].get_text(strip=True) if h1_tags else None,
         "image_count": len(images),
+        # check_images ile aynı tanım: alt özniteliği hiç yok (alt="" sayılmaz)
         "images_missing_alt": sum(1 for img in images if img.get("alt") is None),
         "content_text": full_text[:CONTENT_LIMIT],
-        "content_hash": content_hash,  
+        "content_hash": content_hash,  # veritabanında pages.extra_data (JSON) içinde saklanır
     }

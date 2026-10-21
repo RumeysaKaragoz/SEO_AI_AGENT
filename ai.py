@@ -113,7 +113,7 @@ def validate(field, value, old_value, facts, max_len=None):
 
     letters = [c for c in text if c.isalpha()]
     if letters and sum(c.isupper() for c in letters) / len(letters) > 0.6:
-        return None, "çok fazla BÜYÜK HARF; normal yazım düzeni kullanılmalı"
+        return None, "çok fazla büyük harf kullanılmış; yalnızca cümle başları ve özel isimler büyük harfle başlamalı"
 
     fact_numbers = set(re.findall(r"\d+", facts))
     extra = [n for n in re.findall(r"\d+", text) if n not in fact_numbers]
@@ -164,22 +164,52 @@ def content_excerpt(page, size=1200):
     return text[idx: idx + size] if idx >= 0 else None
 
 
+# Küçük modeller örnekten çok daha iyi öğrenir: gerçek istekten önce bir örnek konuşma verilir.
+# Örnekteki "1204" sayısı gerçek sayfalarda geçmez; model örneği kopyalarsa sayı doğrulaması reddeder.
+EXAMPLES = {
+    "title": (
+        "Sayfa türü: ürün sayfası\n"
+        "URL: https://ornek.com/urun/yuksek-bel-kot-pantolon-1204-mavi-38\n"
+        "Mevcut başlık: YÜKSEK BEL KOT PANTOLON 1204\n"
+        "H1: YÜKSEK BEL KOT PANTOLON 1204 38 - Mavi\n"
+        "Mevcut meta description: yüksek bel kot pantolon 1204\n"
+        "Sayfa metninden kesit: (güvenilir kesit yok)\n"
+        "Tespit edilen sorunlar: Başlık tamamen büyük harfle yazılmış.",
+        {"value": "Yüksek Bel Kot Pantolon 1204 Mavi",
+         "reason": "Başlık normal yazım düzenine çevrildi ve renk bilgisi eklendi."},
+    ),
+    "meta_description": (
+        "Sayfa türü: ürün sayfası\n"
+        "URL: https://ornek.com/urun/yuksek-bel-kot-pantolon-1204-mavi-38\n"
+        "Mevcut başlık: YÜKSEK BEL KOT PANTOLON 1204\n"
+        "H1: YÜKSEK BEL KOT PANTOLON 1204 38 - Mavi\n"
+        "Mevcut meta description: yüksek bel kot pantolon 1204\n"
+        "Sayfa metninden kesit: (güvenilir kesit yok)\n"
+        "Tespit edilen sorunlar: Meta description çok kısa.",
+        {"value": "Yüksek bel kot pantolon 1204 modelini mavi renk seçeneğiyle inceleyin ve hemen sipariş verin.",
+         "reason": "Ürün adı ve renk kullanıldı, sayfada olmayan bilgi eklenmedi."},
+    ),
+}
+
+
 def build_messages(field, page, issues, max_len, brand_suffix, previous_error=None):
     min_len, _ = LIMITS[field]
+    # Not: istemde TAMAMEN BÜYÜK HARFLİ kelime kullanılmaz; model bu tonu yanıta taşıyabiliyor.
     system = (
-        "Sen Türkçe e-ticaret siteleri için çalışan bir SEO editörüsün.\n"
-        f"ALAN: {field}\n"
-        f"Görevin: bu sayfanın {FIELD_LABELS[field]} alanı için yeni bir metin yazmak.\n"
-        "KURALLAR:\n"
-        "1) Yalnızca sana verilen bilgileri kullan. Malzeme, özellik, kampanya, indirim, fiyat, "
-        "stok veya garanti bilgisi UYDURMA.\n"
-        "2) Doğru Türkçe yazım ve ek uyumu kullan. Tüm metni büyük harfle YAZMA; normal yazım düzeni kullan.\n"
-        "3) Ürün kodlarını (ör. 09234) olduğu gibi koru. Fiyat yazma.\n"
-        f"4) Uzunluk: en az {min_len}, en fazla {max_len} karakter.\n"
-        "5) Yalnızca JSON döndür: {\"value\": \"yeni metin\", \"reason\": \"tek cümle Türkçe gerekçe\"}."
+        "Sen Türkçe e-ticaret siteleri için çalışan deneyimli bir SEO editörüsün.\n"
+        f"alan: {field}\n"
+        f"Görevin, bu sayfanın {FIELD_LABELS[field]} alanı için yeni bir metin yazmak.\n"
+        "Kurallar:\n"
+        "1. Yalnızca sana verilen bilgileri kullan. Malzeme, özellik, kampanya, indirim, fiyat, "
+        "stok ve garanti bilgisi ekleme.\n"
+        "2. Metni normal Türkçe cümle düzeninde yaz: yalnızca cümle başları ve özel isimler büyük harfle "
+        "başlasın. Kelimelerin tamamını büyük harfle yazma.\n"
+        "3. Ürün kodlarını (ör. 1204) olduğu gibi koru. Fiyat yazma.\n"
+        f"4. Uzunluk: en az {min_len}, en fazla {max_len} karakter.\n"
+        "5. Yanıtı yalnızca şu JSON biçiminde ver: {\"value\": \"yeni metin\", \"reason\": \"tek cümle Türkçe gerekçe\"}"
     )
     if brand_suffix:
-        system += "\n6) Marka adını SEN EKLEME; otomatik eklenecek."
+        system += "\n6. Marka adını ekleme, kod kendisi ekleyecek."
 
     lines = [
         f"Sayfa türü: {page_type(page['url'])}",
@@ -192,8 +222,15 @@ def build_messages(field, page, issues, max_len, brand_suffix, previous_error=No
     lines.append(f"Sayfa metninden kesit: {excerpt}" if excerpt else "Sayfa metninden kesit: (güvenilir kesit yok)")
     lines.append("Tespit edilen sorunlar: " + " | ".join(i["message"] for i in issues))
     if previous_error:
-        lines.append(f"ÖNCEKİ ÖNERİ REDDEDİLDİ: {previous_error}. Kuralları dikkate alarak yeniden yaz.")
-    return [{"role": "system", "content": system}, {"role": "user", "content": "\n".join(lines)}]
+        lines.append(f"Önceki öneri reddedildi: {previous_error}. Kuralları dikkate alarak yeniden yaz.")
+
+    example_user, example_answer = EXAMPLES[field]
+    return [
+        {"role": "system", "content": system},
+        {"role": "user", "content": example_user},
+        {"role": "assistant", "content": json.dumps(example_answer, ensure_ascii=False)},
+        {"role": "user", "content": "\n".join(lines)},
+    ]
 
 
 # ----------------------------------------------------------------------------

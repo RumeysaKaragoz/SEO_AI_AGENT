@@ -93,6 +93,14 @@ def check_headings(soup):
     return issues
 
 
+def content_images(soup):
+    """
+    Sayfa görselleri; <noscript> içindekiler (Facebook/Google izleme pikselleri gibi) hariç.
+    Bunlar ziyaretçiye gösterilen içerik görseli değildir, alt metin gerektirmez.
+    """
+    return [img for img in soup.find_all("img") if img.find_parent("noscript") is None]
+
+
 def check_images(soup):
     """
     Yalnızca alt özniteliği HİÇ OLMAYAN görseller işaretlenir.
@@ -100,7 +108,7 @@ def check_images(soup):
     bu yüzden hata sayılmaz.
     """
     issues = []
-    for img in soup.find_all("img"):
+    for img in content_images(soup):
         if img.get("alt") is None:
             issues.append(make_issue("IMG_ALT_MISSING", "on-page",
                                      f"<img> etiketi için alt özniteliği eksik. (src: {img.get('src')})"))
