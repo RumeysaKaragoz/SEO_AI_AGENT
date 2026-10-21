@@ -70,13 +70,24 @@ def check_site(origin):
 
 # ------------------------- tekrar eden içerik -------------------------
 
+def _base(url):
+    """Sorgu dizesi ve fragment olmadan URL: /kategori/x?filtre=a -> /kategori/x"""
+    return url.split("#")[0].split("?")[0]
+
+
 def _groups(pages, key_fn):
+    """
+    Aynı anahtara (başlık, açıklama, içerik özeti) sahip sayfa gruplarını döndürür.
+    Yalnızca sorgu dizesiyle (?filtre=...) birbirinden ayrılan URL'lerden oluşan gruplar
+    atlanır: bunlar aynı sayfanın varyantlarıdır (canonical konusu), kopya metin sorunu değil.
+    """
     groups = defaultdict(list)
     for page in pages:
         key = key_fn(page["data"])
         if key:
             groups[key].append(page["url"])
-    return [urls for urls in groups.values() if len(urls) > 1]
+    return [urls for urls in groups.values()
+            if len(urls) > 1 and len({_base(u) for u in urls}) > 1]
 
 
 def _norm(text):

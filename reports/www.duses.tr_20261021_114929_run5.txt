@@ -1,0 +1,892 @@
+URL: https://www.duses.tr/
+Tarih: 2026-10-21 11:49:29
+
+ÖZET
+- Analiz edilen sayfa: 100
+- Erişilemeyen sayfa: 0
+- Sorun bulunan sayfa: 100
+- Toplam sorun: 483 (Kritik: 0, Uyarı: 185, Bilgi: 298)
+
+
+============================================================
+
+Sayfa: https://www.duses.tr
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [UYARI] Aynı <title> başka sayfalarda da kullanılıyor: https://www.duses.tr/hesabim/favorilerim
+- [BİLGİ] 175 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Open Graph etiketleri eksik: og:title, og:description, og:image
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim, https://www.duses.tr/kategori/atlet (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/koleksiyon
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 94 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/ust-giyim, https://www.duses.tr/kategori/atlet (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/ust-giyim
+- [UYARI] <title> etiketi 10 karakterden kısa (9).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 88 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/atlet (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/atlet
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 5 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/bluz
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 91 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/body
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 10 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/bustiyer
+- [UYARI] <title> etiketi 10 karakterden kısa (8).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 39 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/crop
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 11 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/gomlek
+- [UYARI] <title> etiketi 10 karakterden kısa (6).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 87 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/hirka
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 41 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/kazak
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 54 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/sweat
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 12 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/t-shirt
+- [UYARI] <title> etiketi 10 karakterden kısa (7).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 24 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/triko
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 49 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/alt-giyim
+- [UYARI] <title> etiketi 10 karakterden kısa (9).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 98 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/esofman
+- [UYARI] <title> etiketi 10 karakterden kısa (7).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 3 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/etek
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 74 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/jean
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 64 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/pantolon
+- [UYARI] <title> etiketi 10 karakterden kısa (8).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 97 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/sort
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 6 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/tayt
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 3 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/dis-giyim
+- [UYARI] <title> etiketi 10 karakterden kısa (9).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 96 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/ceket
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 84 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/kurk
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 27 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/mont-kaban
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 93 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/trenckot
+- [UYARI] <title> etiketi 10 karakterden kısa (8).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 38 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/yelek
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 38 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/aksesuar
+- [UYARI] <title> etiketi 10 karakterden kısa (8).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 71 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/atki
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 3 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/bileklik
+- [UYARI] <title> etiketi 10 karakterden kısa (8).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 3 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/bros
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 11 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/gobek-zinciri
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 3 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/halhal
+- [UYARI] <title> etiketi 10 karakterden kısa (6).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 3 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/kemer
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 3 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/kolye
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 71 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/kupe
+- [UYARI] <title> etiketi 10 karakterden kısa (4).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 71 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/sal
+- [UYARI] <title> etiketi 10 karakterden kısa (3).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 3 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/elbise
+- [UYARI] <title> etiketi 10 karakterden kısa (6).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 96 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/abiye
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 32 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/takim
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 98 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/tulum
+- [UYARI] <title> etiketi 10 karakterden kısa (5).
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 25 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/ithal-urunler
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 91 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/en-cok-satanlar
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 5 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/koleksiyon?filtre_secenekleri=yeni-urunler
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 83 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/kategori/koleksiyon?filtre_secenekleri=kampanyali-urunler
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 93 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/hesabim/favorilerim
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [UYARI] Aynı <title> başka sayfalarda da kullanılıyor: https://www.duses.tr
+- [BİLGİ] Open Graph etiketleri eksik: og:title, og:description, og:image
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+- [BİLGİ] Aynı meta description başka sayfalarda da kullanılıyor: https://www.duses.tr, https://www.duses.tr/kategori/koleksiyon, https://www.duses.tr/kategori/ust-giyim (+42 sayfa daha)
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-tul-elbiseli-yirtmac-trikolu-takim-1117
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (45).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kollar-kurk-deri-ceket-09234-kahverengi-m-l
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (35).
+- [BİLGİ] 59 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kurklu-ekose-tasarim-mont-9009-lacivert-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (36).
+- [BİLGİ] 60 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-bordo-parlak-deri-mont-202395-bordo-s-m
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (35).
+- [BİLGİ] 62 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-simli-etekli-takim-kahverengi-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (24).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-fiyonklu-takim-kahverengi-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (20).
+- [BİLGİ] 53 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kemerli-simli-etekli-takim-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (32).
+- [BİLGİ] 55 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-uzun-kollu-altin-tasli-takim-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (34).
+- [BİLGİ] 57 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-mendil-yaka-simli-triko-takim-kahverengi-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (35).
+- [BİLGİ] 57 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-bisiklet-yaka-simli-takim-bordo-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (31).
+- [BİLGİ] 57 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-jean-detayli-ceketli-takim-siyah-xs
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (32).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/kurdeleli-mini-etekli-ceketli-takim-fk-siyah-m
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (38).
+- [BİLGİ] 55 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-at-desenli-triko-hirka-takim-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (46).
+- [BİLGİ] 55 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/kapsonlu-modal-oysho-takim-bej-m
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (34).
+- [BİLGİ] 57 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/kapsonlu-orme-takim-khv-m
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (27).
+- [BİLGİ] 57 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kadife-gomlekli-takim-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (39).
+- [BİLGİ] 54 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kadife-gomlekli-takim-khv-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (37).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-dantel-bluzlu-triko-takim-khv-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (41).
+- [BİLGİ] 57 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kase-ceketli-takim-khv-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (34).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kase-ceketli-takim-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (36).
+- [BİLGİ] 57 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/magro-parlak-ceketli-takim-olive-42
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (26).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/vatkali-bomber-ceket-1502-kahverengi-l
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (25).
+- [BİLGİ] 57 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/yakasi-deri-kasmir-desenli-hirka-khv-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (42).
+- [BİLGİ] 51 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-tasli-fermuarli-kisa-ceket-kahverengi-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (32).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-payetli-mini-etek-khv-l
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (31).
+- [BİLGİ] 50 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-yakasi-duz-boncuk-detayli-akordiyon-elbise-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (48).
+- [BİLGİ] 55 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-leopar-payetli-jean-ceket-kahverengi-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (31).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-akordion-kumas-pantolon-etekli-takim-bej-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (42).
+- [BİLGİ] 54 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-tasli-bomber-mont-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (23).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kot-b-tasli-ceket-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (23).
+- [BİLGİ] 54 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/beyaz-yaka-sweat-sutlu-kahve-m
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (32).
+- [BİLGİ] 37 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kurdeleli-triko-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (31).
+- [BİLGİ] 48 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-balik-sirti-havuc-pantolon-antresit-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (47).
+- [BİLGİ] 55 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-balik-sirti-havuc-pantolon-lcv-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (42).
+- [BİLGİ] 55 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/peplum-polo-yaka-dugmeli-triko-elbise-koyu-bej-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/cizgili-gold-dugmeli-hirka-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (38).
+- [BİLGİ] 47 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/peplum-polo-yaka-dugmeli-triko-elbise-acik-bej-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-arkasi-sisme-jean-mont-mavi-36
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (38).
+- [BİLGİ] 58 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-yakasi-pelus-kisa-sisme-mont-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (46).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-yumusak-gold-detayli-triko-lcv-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (42).
+- [BİLGİ] 49 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/kapsonlu-desenli-kasmir-hirka-vanilya-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (43).
+- [BİLGİ] 50 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kollari-payet-triko-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (37).
+- [BİLGİ] 49 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kasmir-uzun-tasli-kazak-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (41).
+- [BİLGİ] 50 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-payetli-kadife-ceket-gri-s-m
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (36).
+- [BİLGİ] 55 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kollari-dekolte-payet-triko-siyah-s-m
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (45).
+- [BİLGİ] 48 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-kollari-dekolte-payet-triko-gri-l-xl
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (44).
+- [BİLGİ] 49 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-triko-kemerli-etek-siyah-s-m
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (36).
+- [BİLGİ] 53 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-simli-pul-payetli-ceket-siyah-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (41).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-bordo-tasli-ceket-bordo-l
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (33).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-suet-kurklu-ceket-2791-kahverengi-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (28).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-ozel-deri-duk-yaka-isleme-ve-dantel-detayli-triko-1003-siyah-std
+- [UYARI] <title> etiketi 55 karakterden uzun (60); arama sonuçlarında kesilebilir.
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] 52 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-angora-kurklu-hirka-2794-bebe-mavisi-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (30).
+- [BİLGİ] 49 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-ozel-seri-kilit-broslu-triko-1006-bordo-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (39).
+- [BİLGİ] 53 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: https://www.duses.tr/urun/ithal-ozel-seri-bros-fermuarli-takim-1033-kahverengi-std
+- [UYARI] <img> etiketi için alt özniteliği eksik. (src: https://www.facebook.com/tr?id=1684292135873860&ev=PageView&noscript=1)
+- [BİLGİ] <meta name='description'> etiketi 50 karakterden kısa (41).
+- [BİLGİ] 56 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.

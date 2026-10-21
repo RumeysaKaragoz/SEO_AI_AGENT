@@ -110,6 +110,17 @@ def main():
     assert "https://s.com/y" not in by and "https://s.com/z" not in by  # boş başlıklar eşleşmez
     print("OK  tekrar eden başlık / içerik / meta description doğru sayfalara bağlandı, boşlar eşleşmedi")
 
+    # Yalnızca sorgu dizesiyle ayrılan URL varyantları "tekrar eden başlık" sayılmaz
+    variants = [
+        page("https://s.com/kategori/x", "Koleksiyon", "Açıklama", "h1"),
+        page("https://s.com/kategori/x?filtre=a", "Koleksiyon", "Açıklama", "h1"),
+        page("https://s.com/kategori/x?filtre=b", "Koleksiyon", "Açıklama", "h1"),
+    ]
+    assert check_duplicates(variants) == {}
+    mixed = variants + [page("https://s.com/kategori/y", "Koleksiyon", "Başka", "h2")]
+    assert {"DUPLICATE_TITLE"} <= {i["code"] for i in check_duplicates(mixed)["https://s.com/kategori/y"]}
+    print("OK  yalnızca ?filtre varyantlarından oluşan gruplar tekrar sayılmadı; farklı sayfayla çakışma yine yakalanıyor")
+
     # --- her kuralın bir önem derecesi var mı? ---
     import re
     import seo.rules as rules_module
