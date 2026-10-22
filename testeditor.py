@@ -2,10 +2,11 @@
 import json
 import os
 import tempfile
-import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from database import get_connection, init_db
-from editor.editor import get_change, propose_merged
+from editor import get_change, propose_merged, save_draft
+from review import approve
+
 
 def build_db(field="title", new="Kürklü Ekose Mont 9009 | Marka", status="pending"):
     path = os.path.join(tempfile.mkdtemp(), "t.db")
@@ -74,6 +75,19 @@ def main():
     expect_value_error(lambda: propose_merged(build_db(field="h1"), 1, "x", chat=Fake(j("x"))))
     assert get_change(c, 1)["status"] == "pending"
     print("OK  boş istek, olmayan kayıt, bekleyen olmayan kayıt, desteklenmeyen alan (h1) reddedildi")
+    c = build_db()
+    assert save_draft(c, 1, "  İthal Kürklü   Ekose Mont 9009 | Marka ") is None
+    g = get_change(c, 1)
+    assert g["suggestion"] == "İthal Kürklü Ekose Mont 9009 | Marka" and g["status"] == "pending", g
+    assert "uyarı" in save_draft(c, 1, "Kısa")
+    save_draft(c, 1, "Son Metin Burada Yeterince Uzun")
+    approve(c, 1)  # new_value verilmeden onay: kaydedilen taslak onaylanır
+    g = get_change(c, 1)
+    assert g["status"] == "approved" and g["suggestion"] == "Son Metin Burada Yeterince Uzun", g
+    expect_value_error(lambda: save_draft(c, 1, "Onaylıya yazılamaz"))
+    expect_value_error(lambda: save_draft(build_db(), 1, "   "))
+    expect_value_error(lambda: save_draft(build_db(), 99, "x"))
+    print("OK  taslak kaydedildi (pending kaldı), uzunluk uyarısı döndü, review.approve taslağı onayladı, onaylı kayda yazılamadı")
     print("\nTüm editor testleri geçti.")
 
 

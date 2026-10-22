@@ -5,7 +5,7 @@ Sonraki işlevler (ortak metin, doğrulama, kaydetme) bu dosyaya eklenecek.
 import json
 
 from ai import DEFAULT_MODEL, FIELD_LABELS, LIMITS, MAX_ATTEMPTS, SCHEMA, ollama_chat, validate
-from review import _reason_for
+from review import _reason_for, length_warning
 
 
 def get_change(conn, change_id):
@@ -122,3 +122,20 @@ def propose_merged(conn, change_id, user_text, model=DEFAULT_MODEL, brand=None, 
         previous_error = error
         notes.append(f"deneme {attempt}: reddedildi — {error} (öneri: {str(value)[:80]})")
     return None, notes
+
+
+def save_draft(conn, change_id, text):
+    """
+    Nihai metni bekleyen kaydın new_value alanına yazar; durum 'pending' kalır (onay ayrı adım:
+    review.approve). AI'nın ilk önerisi ai_reports.recommendations içinde durur.
+    Uzunluk uyarısı varsa metnini, yoksa None döndürür (engellemez; review.py ile aynı davranış).
+    """
+    change = get_change(conn, change_id)
+    if change["status"] != "pending":
+        raise ValueError(f"#{change_id} bekliyor durumunda değil (şu an: {change['status']})")
+    text = " ".join((text or "").split())
+    if not text:
+        raise ValueError("Metin boş olamaz")
+    conn.execute("UPDATE applied_changes SET new_value = ? WHERE id = ?", (text, change_id))
+    conn.commit()
+    return length_warning(change["field"], text)
