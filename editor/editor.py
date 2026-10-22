@@ -4,7 +4,7 @@ Sonraki işlevler (ortak metin, doğrulama, kaydetme) bu dosyaya eklenecek.
 """
 import json
 
-from ai import DEFAULT_MODEL, FIELD_LABELS, LIMITS, MAX_ATTEMPTS, SCHEMA, ollama_chat, validate
+from ai import DEFAULT_MODEL, FIELD_LABELS, LIMITS, MAX_ATTEMPTS, SCHEMA, brand_error, ollama_chat, validate
 from review import _reason_for, length_warning
 
 
@@ -47,7 +47,7 @@ EXAMPLE = (
 )
 
 
-def _merge_messages(field, current, suggestion, user_text, max_len, previous_error=None):
+def _merge_messages(field, current, suggestion, user_text, max_len, previous_error=None, brand_suffix=False):
     min_len, _ = LIMITS[field]
     system = (
         "Sen Türkçe e-ticaret siteleri için çalışan deneyimli bir SEO editörüsün.\n"
@@ -62,6 +62,8 @@ def _merge_messages(field, current, suggestion, user_text, max_len, previous_err
         f"4. Uzunluk: en az {min_len}, en fazla {max_len} karakter.\n"
         "5. Yanıtı yalnızca şu JSON biçiminde ver: {\"value\": \"son metin\", \"reason\": \"tek cümle Türkçe gerekçe\"}"
     )
+    if brand_suffix:
+        system += "\n6. Marka adını ekleme, kod kendisi ekleyecek. Kullanıcının isteğinde marka adı geçse bile metne alma."
     lines = [f"Mevcut metin: {current or '(yok)'}",
              f"AI önerisi: {suggestion}",
              f"Kullanıcının isteği: {user_text}"]
@@ -106,7 +108,7 @@ def propose_merged(conn, change_id, user_text, model=DEFAULT_MODEL, brand=None, 
     notes, previous_error = [], None
     for attempt in range(1, MAX_ATTEMPTS + 1):
         raw = chat(model, _merge_messages(field, change["current"], suggestion, user_text,
-                                          max_len, previous_error), SCHEMA)
+                                          max_len, previous_error, bool(suffix)), SCHEMA)
         try:
             data = json.loads(raw)
             value, reason = data["value"], str(data.get("reason", "")).strip()
@@ -115,6 +117,8 @@ def propose_merged(conn, change_id, user_text, model=DEFAULT_MODEL, brand=None, 
             notes.append(f"deneme {attempt}: {previous_error}")
             continue
         clean, error = validate(field, value, change["current"], facts, max_len=max_len)
+        if error is None and suffix:
+            error = brand_error(brand, clean)
         if error is None:
             return {"change_id": change_id, "field": field, "current": change["current"],
                     "ai_suggestion": change["suggestion"], "user_text": user_text,

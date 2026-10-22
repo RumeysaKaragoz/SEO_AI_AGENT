@@ -260,8 +260,19 @@ def test_ollama_http():
     print("OK  Ollama kapalıyken açıklayıcı hata mesajı")
 
 
+def test_brand_not_duplicated():
+    from ai import propose
+    page = {"id": 1, "url": "https://s.com/kategori/ust-giyim", "title": "Üst Giyim", "meta_description": None,
+            "h1_text": None, "content_text": ""}
+    chat = FakeModel({("kategori", "title"): [j("Üst Giyim - Düşes Butik"), j("Üst Giyim Modelleri")]})
+    result, notes = propose("title", page, [{"message": "kısa"}], chat, "fake", "Düşes Butik")
+    assert result["new"] == "Üst Giyim Modelleri | Düşes Butik" and "marka adı" in notes[0], (result, notes)
+    print("OK  başlıkta marka adı geçerse reddedildi, 2. denemede tekrar yok")
+
+
 if __name__ == "__main__":
     test_validate()
+    test_brand_not_duplicated()
     path = test_pipeline()
     test_review(path)
     test_ollama_http()

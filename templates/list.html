@@ -8,6 +8,7 @@
   <p class="new">Yeni: {{ item.new }} <span class="meta">({{ item.new|length }} karakter)</span></p>
   {% if item.reason %}<p class="meta">Neden: {{ item.reason }}</p>{% endif %}
   {% if item.warning %}<p class="warn">{{ item.warning }}</p>{% endif %}
+  <a href="{{ url_for('change_page', change_id=item.id) }}">İncele</a>
 </div>
 {% else %}
 <p class="empty">Bekleyen öneri yok. Öneri üretmek için: <code>python ai.py</code></p>

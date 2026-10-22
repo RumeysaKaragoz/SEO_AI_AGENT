@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}İncele #{{ change.id }}{% endblock %}
+{% block content %}
+<p><a href="{{ url_for('pending_list') }}">← Bekleyen öneriler</a></p>
+<h2>#{{ change.id }} · {{ field_name }}</h2>
+<p class="meta">{{ change.url }} · durum: {{ change.status }}</p>
+{% if error %}<p class="err">{{ error }}</p>{% endif %}
+{% if message %}<p class="ok">{{ message }}</p>{% endif %}
+{% if warning %}<p class="warn">{{ warning }}</p>{% endif %}
+{% if notes %}<ul class="meta">{% for n in notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}
+
+<div class="cols">
+  <section class="card">
+    <h3>AI analizi</h3>
+    <p class="label">Mevcut metin</p>
+    <p class="old">{{ change.current or "(yok)" }}</p>
+    <p class="label">Kayıtlı öneri / taslak</p>
+    <p class="new">{{ change.suggestion }}</p>
+    {% if change.reason %}<p class="meta">Neden: {{ change.reason }}</p>{% endif %}
+  </section>
+
+  <section class="card">
+    <h3>Ortak düzenleme</h3>
+    {% if change.status == 'pending' %}
+    <form method="post"
+          onsubmit="var b=event.submitter; if(b){setTimeout(function(){b.disabled=true;b.textContent='Çalışıyor…'},0)}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <p class="label">Senin isteğin (ör. "ithal olsun")</p>
+      <textarea name="user_text" rows="2">{{ user_text or "" }}</textarea>
+      <button type="submit" formaction="{{ url_for('merge', change_id=change.id) }}">Ortak metin öner</button>
+      {% if merged %}<p class="meta">Neden: {{ merged.reason }}</p>{% endif %}
+
+      <p class="label">Son metin <span id="count"></span>
+        {% if limits %}<span class="meta">(önerilen {{ limits[0] }}–{{ limits[1] }} karakter)</span>{% endif %}</p>
+      <textarea name="final_text" id="final_text" rows="3">{{ final_text }}</textarea>
+      <button type="submit" formaction="{{ url_for('save', change_id=change.id) }}">Taslağı kaydet</button>
+      {% if need_confirm %}
+      <button type="submit" name="confirm" value="1" formaction="{{ url_for('approve_view', change_id=change.id) }}">Yine de onayla</button>
+      {% else %}
+      <button type="submit" formaction="{{ url_for('approve_view', change_id=change.id) }}">Onayla</button>
+      {% endif %}
+      <button type="submit" formaction="{{ url_for('reject_view', change_id=change.id) }}">Reddet</button>
+      <p class="meta">Onay yalnızca veritabanına kaydedilir; canlı siteye hiçbir şey gönderilmez.</p>
+    </form>
+    <script>
+      var box = document.getElementById("final_text"), count = document.getElementById("count");
+      function update() { count.textContent = "(" + box.value.trim().replace(/\s+/g, " ").length + " karakter)"; }
+      box.addEventListener("input", update); update();
+    </script>
+    {% else %}
+    <p class="meta">Bu kayıt artık bekliyor durumunda değil ({{ change.status }}); düzenlenemez.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

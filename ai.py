@@ -127,6 +127,13 @@ def validate(field, value, old_value, facts, max_len=None):
     return text, None
 
 
+def brand_error(brand, text):
+    """Marka eki kodla eklenir; metnin kendisinde marka adı geçerse tekrar eder."""
+    if brand and tr_lower(brand) in tr_lower(text):
+        return f"marka adı ('{brand}') metinde olmamalı; kod kendisi ekleyecek"
+    return None
+
+
 # ----------------------------------------------------------------------------
 # Prompt
 # ----------------------------------------------------------------------------
@@ -259,6 +266,8 @@ def propose(field, page, issues, chat, model, brand=None):
             continue
 
         clean, error = validate(field, value, old_value, facts, max_len=max_len)
+        if error is None and suffix:
+            error = brand_error(brand, clean)
         if error is None:
             return {"field": field, "old": old_value, "new": clean + suffix, "reason": reason}, notes
         previous_error = error

@@ -59,6 +59,12 @@ def main():
     result, notes = propose_merged(c, 1, "ithal olsun", chat=chat, brand="Marka")
     assert result and len(notes) == 1 and "sayı" in notes[0]
     assert "Önceki öneri reddedildi" in chat.users[1] and "sayı" in chat.users[1]
+    chat = Fake(j("İthal Kürklü Mont 9009 Marka"), j("İthal Kürklü Mont 9009"))
+    result, notes = propose_merged(c, 1, "Mont 9009 | Marka", chat=chat, brand="Marka")
+    assert result["merged"] == "İthal Kürklü Mont 9009 | Marka" and "marka adı" in notes[0], (result, notes)
+    assert "marka adı" in chat.users[1] and "6. Marka adını ekleme" not in chat.users[1]
+    print("OK  metinde marka adı geçerse reddedilip yeniden yazdırıldı (marka tekrarı yok)")
+
     print("OK  uydurma sayı reddedildi, ret nedeni 2. denemede modele iletildi")
 
     result, _ = propose_merged(c, 1, "indirim yazsın", chat=Fake(j("Kürklü Ekose Mont 9009 indirim")), brand=None)
