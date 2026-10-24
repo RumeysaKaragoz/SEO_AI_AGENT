@@ -4,8 +4,10 @@ Sonraki işlevler (ortak metin, doğrulama, kaydetme) bu dosyaya eklenecek.
 """
 import json
 
-from ai import DEFAULT_MODEL, FIELD_LABELS, LIMITS, MAX_ATTEMPTS, SCHEMA, brand_error, ollama_chat, validate
+from ai import (DEFAULT_MODEL, FIELD_LABELS, LIMITS, MAX_ATTEMPTS, SCHEMA, _fold, ollama_chat,
+                strip_brand, validate)
 from review import _reason_for, length_warning
+from site_profile import profile_for_run
 
 
 def get_change(conn, change_id):
@@ -47,8 +49,9 @@ EXAMPLE = (
 )
 
 
-def _merge_messages(field, current, suggestion, user_text, max_len, previous_error=None, brand_suffix=False):
-    min_len, _ = LIMITS[field]
+def _merge_messages(field, current, suggestion, user_text, max_len, previous_error=None, brand_suffix=False,
+                    min_len=None, banned=()):
+    min_len = LIMITS[field][0] if min_len is None else min_len
     system = (
         "Sen Türkçe e-ticaret siteleri için çalışan deneyimli bir SEO editörüsün.\n"
         f"alan: {field}\n"
@@ -62,8 +65,13 @@ def _merge_messages(field, current, suggestion, user_text, max_len, previous_err
         f"4. Uzunluk: en az {min_len}, en fazla {max_len} karakter.\n"
         "5. Yanıtı yalnızca şu JSON biçiminde ver: {\"value\": \"son metin\", \"reason\": \"tek cümle Türkçe gerekçe\"}"
     )
+    rule_no = 6
     if brand_suffix:
-        system += "\n6. Marka adını ekleme, kod kendisi ekleyecek. Kullanıcının isteğinde marka adı geçse bile metne alma."
+        system += (f"\n{rule_no}. Marka adını ekleme, kod kendisi ekleyecek. "
+                   "Kullanıcının isteğinde marka adı geçse bile metne alma.")
+        rule_no += 1
+    if banned:
+        system += f"\n{rule_no}. Şu ifadeleri hiçbir biçimde kullanma: {', '.join(banned)}."
     lines = [f"Mevcut metin: {current or '(yok)'}",
              f"AI önerisi: {suggestion}",
              f"Kullanıcının isteği: {user_text}"]
@@ -93,12 +101,20 @@ def propose_merged(conn, change_id, user_text, model=DEFAULT_MODEL, brand=None, 
     if not user_text:
         raise ValueError("Kullanıcının isteği boş olamaz")
 
+    # Marka ve yasaklı ifadeler site profilinden gelir (ai.generate_suggestions ile aynı)
+    run_id = conn.execute("SELECT crawl_run_id FROM pages WHERE id = ?", (change["page_id"],)).fetchone()[0]
+    profile = profile_for_run(conn, run_id)
+    brand = brand or profile["brand_name"] or None
+    # Kullanıcı yasaklı bir ifadeyi kendi isteğinde özellikle yazdıysa o ifade yasak sayılmaz
+    banned = [b for b in profile["banned_phrases"] if _fold(b) not in _fold(user_text)]
+
     # Marka eki kodla eklenir (ai.propose ile aynı): modele gösterilen öneriden çıkarılır
     suffix = f" | {brand}" if brand and field == "title" else ""
     suggestion = change["suggestion"]
     if suffix and suggestion.endswith(suffix):
         suggestion = suggestion[: -len(suffix)]
     max_len = LIMITS[field][1] - len(suffix)
+    min_len = max(1, LIMITS[field][0] - len(suffix))
 
     page = conn.execute(
         "SELECT title, h1_text, meta_description, url FROM pages WHERE id = ?", (change["page_id"],)).fetchone()
@@ -108,7 +124,7 @@ def propose_merged(conn, change_id, user_text, model=DEFAULT_MODEL, brand=None, 
     notes, previous_error = [], None
     for attempt in range(1, MAX_ATTEMPTS + 1):
         raw = chat(model, _merge_messages(field, change["current"], suggestion, user_text,
-                                          max_len, previous_error, bool(suffix)), SCHEMA)
+                                          max_len, previous_error, bool(suffix), min_len, banned), SCHEMA)
         try:
             data = json.loads(raw)
             value, reason = data["value"], str(data.get("reason", "")).strip()
@@ -116,9 +132,9 @@ def propose_merged(conn, change_id, user_text, model=DEFAULT_MODEL, brand=None, 
             previous_error = "yanıt geçerli JSON ({\"value\", \"reason\"}) değil"
             notes.append(f"deneme {attempt}: {previous_error}")
             continue
-        clean, error = validate(field, value, change["current"], facts, max_len=max_len)
-        if error is None and suffix:
-            error = brand_error(brand, clean)
+        if suffix and isinstance(value, str):
+            value = strip_brand(value, brand)  # marka kodla eklenir; model yazdıysa tekrar etmesin
+        clean, error = validate(field, value, change["current"], facts, suffix=suffix, banned=banned)
         if error is None:
             return {"change_id": change_id, "field": field, "current": change["current"],
                     "ai_suggestion": change["suggestion"], "user_text": user_text,

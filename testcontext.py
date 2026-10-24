@@ -40,11 +40,11 @@ def build_db():
     add_issue(c, ids["mont1"], "TITLE_TOO_SHORT")
     add_issue(c, ids["mont1"], "META_DESC_TOO_SHORT")
     ids["mont2"] = add_page(c, "/urun/kaban-9010-siyah-std", "Yünlü Kaban Siyah | Düşes Butik",
-                            "Yünlü kaban 9010 siyah renk seçeneğiyle inceleyin.", "YÜNLÜ KABAN 9010 STD - Siyah")
+                            "Yünlü kaban 9010 siyah renk seçeneğiyle inceleyin ve size uygun bedeni hemen seçin.", "YÜNLÜ KABAN 9010 STD - Siyah")
     ids["mont3"] = add_page(c, "/urun/uzun-mont-9011-bej-std", "Uzun Mont Bej | Düşes Butik",
-                            "Uzun mont 9011 bej renkte inceleyin ve sipariş verin.", "UZUN MONT 9011 STD - Bej")
+                            "Uzun mont 9011 bej renkte inceleyin, size uygun bedeni seçin ve sipariş verin.", "UZUN MONT 9011 STD - Bej")
     ids["triko1"] = add_page(c, "/urun/klasik-triko-2001-krem-std", "Klasik Triko Krem | Düşes Butik",
-                             "Klasik triko 2001 krem renkte inceleyin ve sipariş verin.", "KLASİK TRİKO 2001 STD - Krem")
+                             "Klasik triko 2001 krem renkte inceleyin, size uygun bedeni seçin ve sipariş verin.", "KLASİK TRİKO 2001 STD - Krem")
     ids["triko2"] = add_page(c, "/urun/yuvarlak-yaka-triko-2002-gri-std", "Yuvarlak Yaka Triko Gri | Düşes Butik",
                              None, "YUVARLAK YAKA TRİKO 2002 STD - Gri")
     add_issue(c, ids["triko2"], "META_DESC_MISSING")
@@ -83,13 +83,13 @@ def test_category_context():
     c = get_connection(path)
     out = ctx(c, ids["triko"], "meta_description", ["DUPLICATE_META_DESC"])
     text = out["text"]
-    for expected in ("Klasik Triko 2001 Std - Krem", "Yuvarlak Yaka Triko 2002 Std - Gri"):
+    for expected in ("Klasik Triko Krem", "Yuvarlak Yaka Triko Gri"):
         assert expected in text, text
     assert "Ekose" not in text and "Kaban" not in text, text      # başka kategorinin ürünleri yok
     assert "3 sayfada aynı" in text, text                          # 3 kategori; filtre varyantı sayılmaz
     assert "filtre" not in text and "?" not in text
-    assert "KLASİK" in out["extra_facts"] and "EKOSE" not in out["extra_facts"]  # facts ham metni taşır
-    print("OK  kategori sayfası: yalnızca kendi ürünleri, normal yazım, ham metin extra_facts'te, varyant sayılmadı")
+    assert "Klasik Triko Krem" in out["extra_facts"] and "Ekose" not in out["extra_facts"]  # facts, modele gösterilenle aynı adlar
+    print("OK  kategori sayfası: yalnızca kendi ürünleri (başlıktan, renk/beden eki olmadan), extra_facts aynı adlar, varyant sayılmadı")
     c.close()
 
 
@@ -135,6 +135,9 @@ def test_budget_and_readonly():
     for n in range(30):
         add_page(c, f"/urun/uzun-adli-triko-modeli-{3000 + n}-renk-std", f"Triko {n}", None,
                  f"ÇOK UZUN ADLI TRİKO MODELİ {3000 + n} STD - Renk Seçeneği Bir İki Üç Dört")
+    # 'triko' çoğu üründe geçerse ayırt edici sayılmaz (COMMON_TOKEN_RATIO); başka ürünler de ekle
+    for n in range(40):
+        add_page(c, f"/urun/baska-model-{n}-std", f"Baska {n}", None, f"BAŞKA MODEL {n} STD")
     c.commit()
     before = c.total_changes
     out = ctx(c, ids["triko"], "meta_description", ["DUPLICATE_META_DESC"])
@@ -150,10 +153,39 @@ def test_budget_and_readonly():
     c.close()
 
 
+def test_brand_examples():
+    from site_profile import import_profile
+    path, ids = build_db()
+    c = get_connection(path)
+    # profil yokken bölüm yok
+    assert "beğendiği" not in ctx(c, ids["mont1"], "title", ["TITLE_TOO_SHORT"])["text"]
+
+    long_meta = "Özenle seçilmiş kadın giyim ürünlerini Düşes Butik ile keşfedin. " * 4
+    import_profile(c, BASE, {
+        "brand_name": "Düşes Butik",
+        "example_titles": ["Şık Kadın Bluz Modelleri | Düşes Butik", "Özel Tasarım Kadın Ceket | Düşes Butik"],
+        "example_meta_descriptions": [long_meta, long_meta + "b", long_meta + "c"],
+    })
+    title_ctx = ctx(c, ids["mont1"], "title", ["TITLE_TOO_SHORT"])["text"]
+    meta_ctx = ctx(c, ids["mont1"], "meta_description", ["META_DESC_TOO_SHORT"])["text"]
+    assert "Sitenin sahibinin beğendiği başlık örnekleri" in title_ctx and "Şık Kadın Bluz Modelleri" in title_ctx
+    assert "Sitenin sahibinin beğendiği meta description örnekleri" in meta_ctx
+    assert "Bluz Modelleri" not in meta_ctx and "Özenle seçilmiş" not in title_ctx   # alana özgü liste
+    brand_section = [s for s in meta_ctx.split("\n\n") if s.startswith("Sitenin sahibinin")][0]
+    assert len(brand_section) <= BUDGETS["brand"], len(brand_section)               # bütçeye uyuyor
+    assert len(meta_ctx) <= sum(BUDGETS.values()) + 6
+    before = c.total_changes
+    ctx(c, ids["triko"], "title", ["TITLE_TOO_SHORT"])
+    assert c.total_changes == before, "build_context veritabanına yazmamalı"
+    print("OK  marka örnekleri: alana özgü, bütçeye uyuyor, profil yokken bölüm yok, veritabanına yazılmıyor")
+    c.close()
+
+
 if __name__ == "__main__":
     test_helpers()
     test_category_context()
     test_product_context()
     test_approved_examples()
     test_budget_and_readonly()
+    test_brand_examples()
     print("\nTüm bağlam testleri geçti.")

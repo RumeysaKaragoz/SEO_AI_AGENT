@@ -59,11 +59,10 @@ def main():
     result, notes = propose_merged(c, 1, "ithal olsun", chat=chat, brand="Marka")
     assert result and len(notes) == 1 and "sayı" in notes[0]
     assert "Önceki öneri reddedildi" in chat.users[1] and "sayı" in chat.users[1]
-    chat = Fake(j("İthal Kürklü Mont 9009 Marka"), j("İthal Kürklü Mont 9009"))
+    chat = Fake(j("İthal Kürklü Mont 9009 - Marka"))
     result, notes = propose_merged(c, 1, "Mont 9009 | Marka", chat=chat, brand="Marka")
-    assert result["merged"] == "İthal Kürklü Mont 9009 | Marka" and "marka adı" in notes[0], (result, notes)
-    assert "marka adı" in chat.users[1] and "6. Marka adını ekleme" not in chat.users[1]
-    print("OK  metinde marka adı geçerse reddedilip yeniden yazdırıldı (marka tekrarı yok)")
+    assert result["merged"] == "İthal Kürklü Mont 9009 | Marka" and notes == [] and len(chat.users) == 1, (result, notes)
+    print("OK  model markayı yazsa bile temizlenir, tek '| Marka' kalır (yeniden deneme gerekmez)")
 
     print("OK  uydurma sayı reddedildi, ret nedeni 2. denemede modele iletildi")
 
@@ -74,6 +73,18 @@ def main():
     result, notes = propose_merged(c, 1, "ithal olsun", chat=Fake("json değil", j("Mont")))
     assert result is None and len(notes) == 2, notes
     print("OK  geçersiz JSON / kısa yanıt: sonuç None, nedenler notlarda")
+
+    # --- site profili: marka profilden gelir, yasaklı ifadeler uygulanır, kullanıcı isteği önceliklidir
+    from site_profile import import_profile
+    pc = build_db()
+    import_profile(pc, "https://s.com", {"brand_name": "Marka", "banned_phrases": ["garantili"]})
+    result, _ = propose_merged(pc, 1, "ithal olsun", chat=Fake(j("İthal Kürklü Ekose Mont 9009")))  # brand verilmedi
+    assert result["merged"] == "İthal Kürklü Ekose Mont 9009 | Marka", result
+    result, notes = propose_merged(pc, 1, "ithal olsun", chat=Fake(j("Garantili Ekose Mont 9009 Modeli")))
+    assert result is None and "kullanılmak istenmeyen" in notes[0], (result, notes)
+    result, notes = propose_merged(pc, 1, "garantili olsun", chat=Fake(j("Garantili Ekose Mont 9009 Modeli")))
+    assert result and "Garantili" in result["merged"], (result, notes)
+    print("OK  profil: marka profilden alındı, yasaklı ifade reddedildi, kullanıcı özellikle istediyse serbest")
 
     expect_value_error(lambda: propose_merged(c, 1, "   ", chat=Fake(j("x"))))
     expect_value_error(lambda: propose_merged(c, 99, "x", chat=Fake(j("x"))))

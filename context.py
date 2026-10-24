@@ -17,12 +17,14 @@ import re
 from collections import Counter
 
 from database import DB_PATH, get_connection
+from site_profile import EXAMPLE_KEY_FOR_FIELD, profile_for_run
 
 # Her bölümün karakter bütçesi (7B model ve num_ctx=4096 için küçük tutulur)
-BUDGETS = {"examples": 450, "products": 500, "approved": 300, "duplicate": 200}
+BUDGETS = {"examples": 450, "products": 500, "approved": 300, "duplicate": 200, "brand": 650}
 MAX_PRODUCTS = 8
 MAX_EXAMPLES = 3
 MAX_APPROVED = 2
+MAX_BRAND_EXAMPLES = 3
 
 # Kategori eşleştirmesinde ayırt edici olmayan kelimeler
 GENERIC_TOKENS = {"giyim", "alt", "ust", "dis", "ic", "yeni", "tum", "koleksiyon", "urunleri", "modelleri"}
@@ -205,6 +207,15 @@ def _category_products(page, pages, category_map):
     return names[:MAX_PRODUCTS]
 
 
+def _brand_examples(profile, field):
+    """Sitenin sahibinin site profilinde girdiği, beğendiği örnek metinler (sitenin gözlenen metinlerinden
+    daha güvenilir bir üslup kaynağı; özellikle sitenin kendi metinleri kötüyse)."""
+    examples = profile[EXAMPLE_KEY_FOR_FIELD[field]][:MAX_BRAND_EXAMPLES]
+    lines = [f"- {e}" for e in examples]
+    return _fit(f"Sitenin sahibinin beğendiği {FIELD_NAMES[field]} örnekleri (yalnızca üslup için, kopyalama):",
+                lines, BUDGETS["brand"])
+
+
 def _approved_examples(conn, page, field):
     rows = conn.execute(
         "SELECT p.url, ac.new_value FROM applied_changes ac JOIN pages p ON p.id = ac.page_id "
@@ -233,15 +244,18 @@ def _duplicate_info(page, field, pages, issue_codes):
 # Ana fonksiyon
 # ----------------------------------------------------------------------------
 
-def build_context(conn, run_id, page, field, issue_codes, field_codes):
+def build_context(conn, run_id, page, field, issue_codes, field_codes, profile=None):
     """
     conn        : sqlite3 bağlantısı
     page        : {"id", "url", "title", "meta_description", "h1_text", ...}
     field       : "title" | "meta_description"
     issue_codes : bu sayfanın bu alandaki açık sorun kodları
     field_codes : {sorun_kodu: alan}  (ai.FIELD_FOR_CODE); "sorunsuz örnek" seçimi için
+    profile     : site_profile.get_profile sonucu; verilmezse taramanın sitesinden okunur
     Döndürür: {"text": str, "extra_facts": str}
     """
+    if profile is None:
+        profile = profile_for_run(conn, run_id)
     pages = _load_pages(conn, run_id)
     category_slugs = {slug_of(p["url"]) for p in pages if kind_of(p["url"]) == "kategori"}
     category_map = build_category_map(pages, category_slugs)
@@ -257,6 +271,7 @@ def build_context(conn, run_id, page, field, issue_codes, field_codes):
         lines = [f"- {normalize_caps(n)}" for n in names]
         sections.append(_fit("Bu kategorideki ürünler (sayfada gerçekten bulunan ürün türlerini yazmak için):",
                              lines, BUDGETS["products"]))
+    sections.append(_brand_examples(profile, field))
     sections.append(_style_examples(page, field, pages, problem_ids, category_map))
     sections.append(_approved_examples(conn, page, field))
     sections.append(_duplicate_info(page, field, pages, issue_codes))

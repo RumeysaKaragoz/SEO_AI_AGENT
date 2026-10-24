@@ -14,6 +14,8 @@ import re
 
 import requests
 
+from context import build_context
+from site_profile import profile_for_run
 from database import DB_PATH, get_connection, init_db
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
@@ -89,31 +91,59 @@ def ollama_chat(model, messages, schema, timeout=300, url=OLLAMA_URL):
 # Doğrulama
 # ----------------------------------------------------------------------------
 
-def validate(field, value, old_value, facts, max_len=None):
+_FOLD = str.maketrans("ıüşöçğ", "iusocg")
+_SEPARATORS = " -–—|:·•,"
+
+
+def _fold(text):
+    """Küçük harfe çevirir ve Türkçe karakterleri ASCII karşılıklarına indirger (1'e 1, uzunluk korunur).
+    Küçük modeller markayı 'DÜSES BUTIK' gibi bozuk yazabildiği için eşleştirme buna dayanıklı olmalı."""
+    return tr_lower(text).translate(_FOLD)
+
+
+def strip_brand(value, brand):
+    """Model markayı yine de yazdıysa çıkarır ('Üst Giyim - Marka' -> 'Üst Giyim'); kod kendisi ekler."""
+    folded, target = _fold(value), _fold(brand)
+    while target and target in folded:
+        i = folded.index(target)
+        value = value[:i] + " " + value[i + len(target):]
+        folded = _fold(value)
+    return " ".join(value.split()).strip(_SEPARATORS)
+
+
+def validate(field, value, old_value, facts, suffix="", banned=()):
     """
     Önerilen metni kontrol eder. (temiz_metin, None) ya da (None, hata_mesajı) döndürür.
-    facts: sayfada gerçekten yazan bilgiler (başlık, H1, eski meta, URL) — uydurmayı yakalamak için.
+    facts : sayfada gerçekten yazan bilgiler (başlık, H1, eski meta, URL) — uydurmayı yakalamak için.
+    suffix: koda ait ek (örn. ' | Marka'). Uzunluk ve "mevcutla aynı mı" kontrolü NİHAİ metne
+            (öneri + ek) göre yapılır; döndürülen metin ekSİZdir.
+    banned: kullanılmak istenmeyen ifadeler (site profilinden); sayfada geçse bile reddedilir.
     """
     if not isinstance(value, str):
         return None, "öneri metin değil"
     text = " ".join(value.split()).strip(" \"'“”‘’")
-    min_len, default_max = LIMITS[field]
-    max_len = max_len or default_max
+    full = text + suffix
+    min_len, max_len = LIMITS[field]
 
     if not text:
         return None, "öneri boş"
     if "<" in text or ">" in text:
         return None, "öneri HTML etiketi içeriyor"
-    if len(text) < min_len:
-        return None, f"çok kısa ({len(text)} karakter, en az {min_len} olmalı)"
-    if len(text) > max_len:
-        return None, f"çok uzun ({len(text)} karakter, en fazla {max_len} olmalı)"
-    if old_value and tr_lower(" ".join(old_value.split())) == tr_lower(text):
+    if len(full) < min_len:
+        return None, f"çok kısa ({len(full)} karakter, en az {min_len} olmalı)"
+    if len(full) > max_len:
+        return None, f"çok uzun ({len(full)} karakter, en fazla {max_len} olmalı)"
+    if old_value and tr_lower(" ".join(old_value.split())) == tr_lower(full):
         return None, "mevcut metinle aynı"
 
     letters = [c for c in text if c.isalpha()]
     if letters and sum(c.isupper() for c in letters) / len(letters) > 0.6:
         return None, "çok fazla büyük harf kullanılmış; yalnızca cümle başları ve özel isimler büyük harfle başlamalı"
+
+    folded_text = _fold(text)
+    for phrase in banned:
+        if phrase and _fold(phrase) in folded_text:
+            return None, f"kullanılmak istenmeyen bir ifade içeriyor: '{phrase}'"
 
     fact_numbers = set(re.findall(r"\d+", facts))
     extra = [n for n in re.findall(r"\d+", text) if n not in fact_numbers]
@@ -125,13 +155,6 @@ def validate(field, value, old_value, facts, max_len=None):
         if word in tr_lower(text) and word not in lowered_facts:
             return None, f"sayfada olmayan bir vaat/ifade içeriyor: '{word}'"
     return text, None
-
-
-def brand_error(brand, text):
-    """Marka eki kodla eklenir; metnin kendisinde marka adı geçerse tekrar eder."""
-    if brand and tr_lower(brand) in tr_lower(text):
-        return f"marka adı ('{brand}') metinde olmamalı; kod kendisi ekleyecek"
-    return None
 
 
 # ----------------------------------------------------------------------------
@@ -199,8 +222,9 @@ EXAMPLES = {
 }
 
 
-def build_messages(field, page, issues, max_len, brand_suffix, previous_error=None):
-    min_len, _ = LIMITS[field]
+def build_messages(field, page, issues, max_len, brand_suffix, previous_error=None, context_text="",
+                   banned=()):
+    min_len = max(1, LIMITS[field][0] - len(brand_suffix or ""))
     # Not: istemde TAMAMEN BÜYÜK HARFLİ kelime kullanılmaz; model bu tonu yanıta taşıyabiliyor.
     system = (
         "Sen Türkçe e-ticaret siteleri için çalışan deneyimli bir SEO editörüsün.\n"
@@ -215,8 +239,12 @@ def build_messages(field, page, issues, max_len, brand_suffix, previous_error=No
         f"4. Uzunluk: en az {min_len}, en fazla {max_len} karakter.\n"
         "5. Yanıtı yalnızca şu JSON biçiminde ver: {\"value\": \"yeni metin\", \"reason\": \"tek cümle Türkçe gerekçe\"}"
     )
+    rule_no = 6
     if brand_suffix:
-        system += "\n6. Marka adını ekleme, kod kendisi ekleyecek."
+        system += f"\n{rule_no}. Marka adını ekleme, kod kendisi ekleyecek."
+        rule_no += 1
+    if banned:
+        system += f"\n{rule_no}. Şu ifadeleri hiçbir biçimde kullanma: {', '.join(banned)}."
 
     lines = [
         f"Sayfa türü: {page_type(page['url'])}",
@@ -227,6 +255,8 @@ def build_messages(field, page, issues, max_len, brand_suffix, previous_error=No
     ]
     excerpt = content_excerpt(page)
     lines.append(f"Sayfa metninden kesit: {excerpt}" if excerpt else "Sayfa metninden kesit: (güvenilir kesit yok)")
+    if context_text:
+        lines.append(context_text)
     lines.append("Tespit edilen sorunlar: " + " | ".join(i["message"] for i in issues))
     if previous_error:
         lines.append(f"Önceki öneri reddedildi: {previous_error}. Kuralları dikkate alarak yeniden yaz.")
@@ -244,18 +274,23 @@ def build_messages(field, page, issues, max_len, brand_suffix, previous_error=No
 # Öneri üretimi
 # ----------------------------------------------------------------------------
 
-def propose(field, page, issues, chat, model, brand=None):
+def propose(field, page, issues, chat, model, brand=None, context=None, banned=()):
     """
     Bir alan için öneri üretir. (öneri_sözlüğü | None, deneme_notları) döndürür.
+    context: context.build_context sonucu ({"text", "extra_facts"}); yoksa bağlamsız çalışır.
     """
     suffix = f" | {brand}" if brand and field == "title" else ""
     max_len = LIMITS[field][1] - len(suffix)
     old_value = page[field]
-    facts = " ".join(filter(None, [page["title"], page["h1_text"], page["meta_description"], page["url"]]))
+    context = context or {"text": "", "extra_facts": ""}
+    # Sitenin mevcut başlıklarındaki marka eki bağlamda kalırsa model onu taklit eder; marka kodla eklenir
+    context_text = context["text"].replace(suffix, "") if suffix else context["text"]
+    facts = " ".join(filter(None, [page["title"], page["h1_text"], page["meta_description"], page["url"],
+                                   context["extra_facts"]]))
 
     notes, previous_error = [], None
     for attempt in range(1, MAX_ATTEMPTS + 1):
-        messages = build_messages(field, page, issues, max_len, suffix, previous_error)
+        messages = build_messages(field, page, issues, max_len, suffix, previous_error, context_text, banned)
         raw = chat(model, messages, SCHEMA)
         try:
             data = json.loads(raw)
@@ -265,9 +300,9 @@ def propose(field, page, issues, chat, model, brand=None):
             notes.append(f"deneme {attempt}: {previous_error}")
             continue
 
-        clean, error = validate(field, value, old_value, facts, max_len=max_len)
-        if error is None and suffix:
-            error = brand_error(brand, clean)
+        if suffix and isinstance(value, str):
+            value = strip_brand(value, brand)  # marka kodla eklenir; model yazdıysa tekrar etmesin
+        clean, error = validate(field, value, old_value, facts, suffix=suffix, banned=banned)
         if error is None:
             return {"field": field, "old": old_value, "new": clean + suffix, "reason": reason}, notes
         previous_error = error
@@ -284,12 +319,23 @@ def _latest_run_id(conn):
 
 
 def generate_suggestions(db_path=DB_PATH, run_id=None, limit=5, model=DEFAULT_MODEL,
-                         brand=None, chat=ollama_chat):
+                         brand=None, chat=ollama_chat, discard_pending=False):
+    """discard_pending=True: bu taramadaki yalnızca BEKLEYEN önerileri silip yeniden üretir
+    (onaylanmış / reddedilmiş / uygulanmış kayıtlara dokunmaz)."""
     init_db(db_path)
     conn = get_connection(db_path)
     conn.row_factory = None
     try:
         run_id = run_id or _latest_run_id(conn)
+        if discard_pending:
+            deleted = conn.execute(
+                "DELETE FROM applied_changes WHERE status = 'pending' AND page_id IN "
+                "(SELECT id FROM pages WHERE crawl_run_id = ?)", (run_id,)).rowcount
+            conn.commit()
+            print(f"{deleted} bekleyen öneri silindi, yeniden üretilecek.")
+        profile = profile_for_run(conn, run_id)
+        brand = brand or profile["brand_name"] or None  # --brand verilmediyse site profilindeki marka
+        banned = profile["banned_phrases"]
         placeholders = ",".join("?" * len(FIELD_FOR_CODE))
         rows = conn.execute(
             f"""
@@ -334,7 +380,9 @@ def generate_suggestions(db_path=DB_PATH, run_id=None, limit=5, model=DEFAULT_MO
             print(f"[{summary['pages']}/{limit}] {page['url']}")
             accepted, report_lines = [], []
             for field, issues in todo.items():
-                proposal, notes = propose(field, page, issues, chat, model, brand)
+                ctx = build_context(conn, run_id, page, field, [i["code"] for i in issues], FIELD_FOR_CODE,
+                                    profile)
+                proposal, notes = propose(field, page, issues, chat, model, brand, ctx, banned)
                 report_lines.extend(f"[{field}] {n}" for n in notes)
                 if proposal is None:
                     summary["failed"] += 1
@@ -374,10 +422,13 @@ def main():
     parser.add_argument("--run-id", type=int, default=None, help="Varsayılan: son tamamlanan tarama")
     parser.add_argument("--limit", type=int, default=5, help="En fazla kaç sayfa için öneri üretilsin")
     parser.add_argument("--model", default=DEFAULT_MODEL)
-    parser.add_argument("--brand", default=None, help="Başlıkların sonuna ' | MARKA' eklenir")
+    parser.add_argument("--brand", default=None, help="Başlıkların sonuna ' | MARKA' eklenir (varsayılan: site profilindeki marka adı)")
+    parser.add_argument("--discard-pending", action="store_true",
+                        help="Bu taramadaki bekleyen önerileri silip yeniden üretir (onaylılara dokunmaz)")
     args = parser.parse_args()
 
-    summary = generate_suggestions(args.db, args.run_id, args.limit, args.model, args.brand)
+    summary = generate_suggestions(args.db, args.run_id, args.limit, args.model, args.brand,
+                                   discard_pending=args.discard_pending)
     print(f"\nTarama #{summary['run_id']}: {summary['pages']} sayfa işlendi, "
           f"{summary['proposed']} öneri kaydedildi (bekliyor), {summary['failed']} öneri üretilemedi.")
     if summary["proposed"]:

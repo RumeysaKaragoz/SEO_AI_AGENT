@@ -79,7 +79,17 @@ def test_validate():
     assert "sayı" in ok("meta_description", "İthal kürklü ekose tasarım mont 9009 şimdi sadece 7990 TL ile sizlerle, hemen inceleyin.")[1]
     assert "'indirim'" in ok("meta_description", "İthal kürklü ekose tasarım mont 9009 modelinde büyük indirim fırsatını kaçırmayın hemen.")[1]
     assert ok("meta_description", "İthal kürklü ekose tasarım mont 9009 modelini lacivert renkte inceleyin ve hemen sipariş verin.")[1] is None
-    assert ok("title", "İthal Mont 9009", max_len=12)[1] and "uzun" in ok("title", "İthal Mont 9009", max_len=12)[1]
+    # uzunluk, marka eki dahil NİHAİ metne göre: kısa öneri + ek kabul, uzun ek sınırı aşar
+    assert validate("title", "Üst Giyim", "Üst Giyim", "Üst Giyim", suffix=" | Düşes Butik") == ("Üst Giyim", None)
+    assert "uzun" in validate("title", "İthal Mont 9009", None, FACTS, suffix=" | " + "M" * 45)[1]
+    assert "çok kısa" in validate("title", "Üst", None, "Üst")[1]
+    # site profilindeki yasaklı ifadeler: sayfada geçse bile reddedilir; Türkçe karakter bozulsa da yakalanır
+    assert "'outlet'" in validate("meta_description", "İthal kürklü ekose tasarım mont 9009 modelini outlet fiyatına inceleyin hemen.",
+                                  None, FACTS, banned=["outlet"])[1]
+    assert "garantili" in validate("title", "GARANTILI ekose mont 9009 modeli", None, FACTS + " GARANTILI", banned=["garantili"])[1] \
+        or "büyük harf" in validate("title", "GARANTILI ekose mont 9009 modeli", None, FACTS + " GARANTILI", banned=["garantili"])[1]
+    assert validate("title", "Garantili Ekose Mont 9009 Modeli", None, FACTS + " garantili", banned=["garantili"])[1]
+    assert validate("title", "Ekose Mont 9009 Modeli", None, FACTS, banned=["garantili", "outlet"])[1] is None
     # Türkçe büyük/küçük harf: "İNDİRİM" sayfada geçiyorsa yasaklı kelime sayılmaz
     assert validate("title", "İndirimli Ekose Mont 9009", None, FACTS + " İNDİRİM")[1] is None
     assert tr_lower("İNDİRİM ISPARTA") == "indirim ısparta"
@@ -261,18 +271,134 @@ def test_ollama_http():
 
 
 def test_brand_not_duplicated():
-    from ai import propose
+    from ai import propose, strip_brand
+    assert strip_brand("Üst Giyim - Düşes Butik", "Düşes Butik") == "Üst Giyim"
+    assert strip_brand("DÜŞES BUTİK | Atlet", "Düşes Butik") == "Atlet"
+    assert strip_brand("Atlet - DÜSES BUTIK", "Düşes Butik") == "Atlet"  # modelin gerçek bozuk çıktısı
+    assert strip_brand("Atlet Modelleri", "Düşes Butik") == "Atlet Modelleri"
+
     page = {"id": 1, "url": "https://s.com/kategori/ust-giyim", "title": "Üst Giyim", "meta_description": None,
             "h1_text": None, "content_text": ""}
-    chat = FakeModel({("kategori", "title"): [j("Üst Giyim - Düşes Butik"), j("Üst Giyim Modelleri")]})
-    result, notes = propose("title", page, [{"message": "kısa"}], chat, "fake", "Düşes Butik")
-    assert result["new"] == "Üst Giyim Modelleri | Düşes Butik" and "marka adı" in notes[0], (result, notes)
-    print("OK  başlıkta marka adı geçerse reddedildi, 2. denemede tekrar yok")
+    issues = [{"message": "kısa"}]
+    # model markayı yazsa bile tek '| Marka' kalır; kısa başlık marka ekiyle geçerli uzunluğa ulaşır
+    chat = FakeModel({("kategori", "title"): [j("Üst Giyim - Düşes Butik")]})
+    result, notes = propose("title", page, issues, chat, "fake", "Düşes Butik")
+    assert result["new"] == "Üst Giyim | Düşes Butik" and notes == [], (result, notes)
+    chat = FakeModel({("kategori", "title"): [j("Kadın Üst Giyim | Düşes Butik")]})
+    result, notes = propose("title", page, issues, chat, "fake", "Düşes Butik")
+    assert result["new"] == "Kadın Üst Giyim | Düşes Butik" and result["new"].count("Düşes Butik") == 1
+    print("OK  marka: model yazsa bile temizlenir (tek '| Marka'), kısa başlık marka ekiyle geçerli sayılır")
+
+
+def test_discard_pending():
+    path = build_db()
+    script = {("urun", "title"): [j("Kürklü Ekose Mont 9009 Lacivert")],
+              ("urun", "meta_description"): [j("İthal kürklü ekose tasarım mont 9009 modelini lacivert renkte inceleyin, hemen sipariş verin.")],
+              ("kategori", "meta_description"): [j("Triko kazak modellerini inceleyin ve size uygun olanı hemen sipariş verin.")]}
+    generate_suggestions(path, model="fake", chat=FakeModel(script))
+    c = get_connection(path)
+    ids = [r[0] for r in c.execute("SELECT id FROM applied_changes ORDER BY id")]
+    approve(c, ids[0])  # biri onaylı, diğerleri bekliyor
+    script[("urun", "meta_description")] = [
+        j("İthal kürklü ekose tasarım mont 9009 modelini lacivert renkte inceleyin, beden seçeneklerine göz atın.")]
+    generate_suggestions(path, model="fake", chat=FakeModel(script), discard_pending=True)
+    rows = c.execute("SELECT id, status, change_type, new_value FROM applied_changes ORDER BY id").fetchall()
+    assert len(rows) == len(ids), rows
+    assert rows[0][0] == ids[0] and rows[0][1] == "approved"            # onaylı kayıt aynen duruyor
+    assert any("beden" in r[3] for r in rows if r[2] == "meta_description")  # bekleyenler yeniden üretildi
+    print("OK  --discard-pending: yalnızca bekleyenler silinip yeniden üretildi, onaylı kayıt korundu")
+    c.close()
+
+
+def test_profile_wired():
+    """Site profili: marka --brand verilmese de profilden gelir; yasaklı ifadeler istemde ve doğrulamada;
+    sahibinin örnekleri bağlamda (marka eki atılmış olarak)."""
+    import testcontext
+    from site_profile import import_profile
+
+    path, ids = testcontext.build_db()
+    c = get_connection(path)
+    import_profile(c, "https://s.com", {
+        "brand_name": "Düşes Butik",
+        "example_titles": ["Şık Kadın Bluz Modelleri | Düşes Butik"],
+        "example_meta_descriptions": ["Özenle seçilmiş kadın giyim ürünlerini Düşes Butik ile keşfedin ve hemen sipariş verin."],
+        "banned_phrases": ["outlet", "garantili"],
+    })
+    c.close()
+
+    seen = []
+
+    def good(model, messages, schema):
+        seen.append(messages)
+        return j("Triko Modelleri ve Kadın Kazaklar")
+
+    generate_suggestions(path, limit=10, model="fake", chat=good)  # brand verilmedi
+    title_msgs = [m for m in seen if "alan: title" in m[0]["content"]]
+    assert title_msgs, "başlık istemi yok"
+    system, user = title_msgs[0][0]["content"], title_msgs[0][-1]["content"]
+    assert "Marka adını ekleme" in system, system            # marka profilden geldi
+    assert "outlet, garantili" in system, system             # yasaklı ifadeler istemde
+    assert "Sitenin sahibinin beğendiği başlık örnekleri" in user and "Şık Kadın Bluz Modelleri" in user
+    assert "| Düşes Butik" not in user                       # örnekteki marka eki atıldı: model taklit etmesin
+    c = get_connection(path)
+    new_titles = [r[0] for r in c.execute("SELECT new_value FROM applied_changes WHERE change_type = 'title'")]
+    assert new_titles and all(t.endswith(" | Düşes Butik") for t in new_titles), new_titles
+    c.close()
+
+    # yasaklı ifade içeren öneri kaydedilmez, nedeni raporda görünür
+    path2, _ = testcontext.build_db()
+    c = get_connection(path2)
+    import_profile(c, "https://s.com", {"brand_name": "Düşes Butik", "banned_phrases": ["outlet"]})
+    c.close()
+    summary = generate_suggestions(path2, limit=10, model="fake",
+                                   chat=lambda m, msgs, s: j("Outlet fiyatına triko modelleri"))
+    c = get_connection(path2)
+    assert c.execute("SELECT COUNT(*) FROM applied_changes WHERE change_type = 'title'").fetchone()[0] == 0
+    reports = " ".join(r[0] for r in c.execute("SELECT report_content FROM ai_reports"))
+    assert "kullanılmak istenmeyen bir ifade içeriyor: 'outlet'" in reports, reports
+    c.close()
+    print("OK  site profili akışa bağlandı: marka profilden, yasaklı ifadeler istemde ve doğrulamada, örnekler bağlamda")
+
+
+def test_context_wired():
+    import testcontext
+    from ai import build_messages, propose
+    # 1) gerçek akış: kategori sayfasının istemine kendi ürünleri, marka eki atılmış örnekler girer
+    path, ids = testcontext.build_db()
+    prompts = []
+
+    def record(model, messages, schema):
+        prompts.append(messages[-1]["content"])
+        return j("x")  # geçersiz (çok kısa): yalnızca istemleri inceliyoruz
+
+    generate_suggestions(path, limit=10, model="fake", brand="Düşes Butik", chat=record)
+    cat = [p for p in prompts if "URL: https://s.com/kategori/triko\n" in p and "Bu kategorideki ürünler" in p]
+    assert cat and "- Klasik Triko Krem" in cat[0], prompts[:1]
+    lines = [l for p in prompts for l in p.splitlines() if l.startswith("- ")]  # yalnızca bağlam satırları
+    assert lines and not [l for l in lines if "| Düşes Butik" in l], lines
+    print("OK  bağlam akışa bağlandı: kategori istemine kendi ürünleri girdi, örneklerden marka eki atıldı")
+
+    # 2) extra_facts doğrulamaya girer: kategori ürün kodundaki sayı uydurma sayılmaz
+    page = {"id": 1, "url": "https://s.com/kategori/triko", "title": "Triko", "meta_description": None,
+            "h1_text": None, "content_text": ""}
+    chat = FakeModel({("kategori", "title"): [j("Triko Modelleri 2001 Koleksiyonu")]})
+    none, notes = propose("title", page, [{"message": "kısa"}], chat, "fake")
+    assert none is None and "sayı" in notes[-1], notes
+    chat = FakeModel({("kategori", "title"): [j("Triko Modelleri 2001 Koleksiyonu")]})
+    ok, _ = propose("title", page, [{"message": "kısa"}], chat, "fake",
+                    context={"text": "", "extra_facts": "Klasik Triko 2001 Std - Krem"})
+    assert ok and ok["new"] == "Triko Modelleri 2001 Koleksiyonu"
+    msgs = build_messages("title", page, [{"message": "kısa"}], 41, "", context_text="BAĞLAM SATIRI")
+    assert "BAĞLAM SATIRI" in msgs[-1]["content"]
+    print("OK  extra_facts doğrulamaya giriyor; bağlam metni istemde")
 
 
 if __name__ == "__main__":
     test_validate()
+    test_context_wired()
     test_brand_not_duplicated()
+    test_profile_wired()
+    test_discard_pending()
     path = test_pipeline()
     test_review(path)
     test_ollama_http()
