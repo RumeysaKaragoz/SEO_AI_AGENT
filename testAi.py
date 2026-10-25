@@ -310,6 +310,67 @@ def test_discard_pending():
     c.close()
 
 
+def test_copy_guard():
+    from ai import copied_phrase, propose
+    ex = "Özenle seçilmiş ithal kadın giyim ürünleri. Güvenli alışveriş ve hızlı kargo."
+    assert copied_phrase("Yeni sezon bluzlar. Güvenli alışveriş ve hızlı kargo ile hemen inceleyin", [ex]) == "Güvenli alışveriş ve hızlı kargo"
+    assert copied_phrase("Kadın ithal giyim ürünleri burada", [ex]) is None          # 4 ardışık kelime kopya sayılmaz
+    assert copied_phrase("GÜVENLİ ALIŞVERİŞ VE HIZLI KARGO burada", [ex])             # büyük/küçük harf ve Türkçe karakter fark etmez
+
+    text = "Bluz modellerini inceleyin. Güvenli alışveriş ve hızlı kargo avantajıyla sipariş verin."
+    err = validate("meta_description", text, None, "bluz", avoid=[ex])[1]
+    assert "kopyalanmış" in err and "Güvenli alışveriş ve hızlı" in err, err        # okunaklı (indirgenmemiş) yazım
+    assert validate("meta_description", text, None, "bluz")[1] is None                # avoid verilmezse kontrol yok
+    assert "aynısı" in validate("title", "Şık Kadın Bluz Modelleri", None, "", avoid=["Şık Kadın Bluz Modelleri"])[1]
+
+    # örnek başlıktaki marka eki kodla eklendiği için karşılaştırmadan çıkarılır
+    page = {"id": 1, "url": "https://s.com/kategori/bluz", "title": "Bluz", "meta_description": None,
+            "h1_text": None, "content_text": ""}
+    result, notes = propose("title", page, [{"message": "kısa"}],
+                            lambda m, msgs, sch: j("Şık Kadın Bluz Modelleri"), "fake", "Düşes Butik",
+                            avoid=["Şık Kadın Bluz Modelleri | Düşes Butik"])
+    assert result is None and "aynısı" in notes[0], (result, notes)
+
+    # model önce örnekten kopyalar, geri bildirimle özgün yazar
+    answers = iter([j("Atlet modellerini inceleyin. Güvenli alışveriş ve hızlı kargo ile siparişinizi verin."),
+                    j("Atlet modellerini renk seçenekleriyle inceleyin ve size uygun olanı hemen sipariş verin.")])
+    page = {"id": 1, "url": "https://s.com/kategori/atlet", "title": "Atlet", "meta_description": None,
+            "h1_text": None, "content_text": ""}
+    result, notes = propose("meta_description", page, [{"message": "meta yok"}],
+                            lambda m, msgs, sch: next(answers), "fake", avoid=[ex])
+    assert result and "renk seçenekleriyle" in result["new"] and "kopyalanmış" in notes[0], (result, notes)
+    # mevcut metin kopya kontrolüne girmez: kısa bir açıklamayı genişletirken eski kelimeleri korumak serbest
+    page = {"id": 1, "url": "https://s.com/urun/x", "title": "Mont", "h1_text": None, "content_text": "",
+            "meta_description": "ithal kürklü ekose tasarım mont 9009"}
+    result, notes = propose("meta_description", page, [{"message": "kısa"}],
+                            lambda m, msgs, sch: j("İthal kürklü ekose tasarım mont 9009 modelini lacivert renkte inceleyin ve hemen sipariş verin."),
+                            "fake", avoid=[ex])
+    assert result and notes == [], (result, notes)
+    print("OK  kopya koruması: örnek metinden 5+ ardışık kelime kopyalanırsa reddedilir; mevcut metni genişletmek serbest")
+
+
+def test_discard_rejected():
+    from review import reject
+    path = build_db()
+    script = {("urun", "title"): [j("Kürklü Ekose Mont 9009 Lacivert")],
+              ("urun", "meta_description"): [j("İthal kürklü ekose tasarım mont 9009 modelini lacivert renkte inceleyin, hemen sipariş verin.")],
+              ("kategori", "meta_description"): [j("Triko kazak modellerini inceleyin ve size uygun olanı hemen sipariş verin.")]}
+    generate_suggestions(path, model="fake", chat=FakeModel(script))
+    c = get_connection(path)
+    ids = [r[0] for r in c.execute("SELECT id FROM applied_changes ORDER BY id")]
+    reject(c, ids[0])
+    status = lambda: sorted(r[0] for r in c.execute("SELECT status FROM applied_changes"))
+
+    # yalnızca bekleyenler silinirse reddedilmiş alan yeniden ÜRETİLMEZ
+    generate_suggestions(path, model="fake", chat=FakeModel(script), discard_pending=True)
+    assert status() == ["pending", "pending", "rejected"], status()
+    # reddedilmişler de silinirse o alan yeniden üretilir; bekleyenlere dokunulmaz
+    generate_suggestions(path, model="fake", chat=FakeModel(script), discard_rejected=True)
+    assert status() == ["pending", "pending", "pending"], status()
+    print("OK  --discard-rejected: reddedilmiş alan ancak bu seçenekle yeniden üretiliyor, bekleyenlere dokunulmuyor")
+    c.close()
+
+
 def test_profile_wired():
     """Site profili: marka --brand verilmese de profilden gelir; yasaklı ifadeler istemde ve doğrulamada;
     sahibinin örnekleri bağlamda (marka eki atılmış olarak)."""
@@ -397,7 +458,9 @@ if __name__ == "__main__":
     test_validate()
     test_context_wired()
     test_brand_not_duplicated()
+    test_copy_guard()
     test_profile_wired()
+    test_discard_rejected()
     test_discard_pending()
     path = test_pipeline()
     test_review(path)

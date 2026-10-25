@@ -5,11 +5,13 @@ Yerel inceleme arayüzü (Flask). Yalnızca bu bilgisayardan erişilir; canlı s
     python app.py --brand "Marka Adı"     ->  http://127.0.0.1:5000
 """
 import argparse
+import os
 import secrets
-from editor.editor import get_change, propose_merged, save_draft
-from flask import Flask, abort, g, redirect, render_template, request, url_for
+
+from flask import Flask, Response, abort, g, redirect, render_template, request, url_for
 
 from ai import DEFAULT_MODEL, LIMITS, ollama_chat
+from apply_changes import apply_change, export_csv, list_unapplied, mark_applied
 from database import DB_PATH, get_connection, init_db
 from editor import get_change, propose_merged, save_draft
 from review import approve, length_warning, list_pending, reject
@@ -18,7 +20,7 @@ FIELD_NAMES = {"title": "Başlık", "meta_description": "Meta description"}
 MESSAGES = {"saved": "Taslak kaydedildi."}
 
 
-def create_app(db_path=DB_PATH, brand=None, model=DEFAULT_MODEL, chat=ollama_chat):
+def create_app(db_path=DB_PATH, brand=None, model=DEFAULT_MODEL, chat=ollama_chat, publisher=None):
     app = Flask(__name__)
     init_db(db_path)
     # Form gönderimlerini doğrulayan, her başlatmada yenilenen anahtar: başka bir sitenin
@@ -124,6 +126,44 @@ def create_app(db_path=DB_PATH, brand=None, model=DEFAULT_MODEL, chat=ollama_cha
             return render(change_id, 400, error=str(e))
         return redirect(url_for("pending_list"))
 
+    def render_approved(status=200, **ctx):
+        items = list_unapplied(get_db())
+        for item in items:
+            item["field_name"] = FIELD_NAMES.get(item["field"], item["field"])
+        return render_template("approved.html", items=items, can_apply=publisher is not None, **ctx), status
+
+    @app.route("/approved")
+    def approved_list():
+        return render_approved()
+
+    @app.route("/approved.csv")
+    def approved_csv():
+        body = "\ufeff" + export_csv(list_unapplied(get_db()))  # BOM: Excel Türkçe karakterleri doğru okusun
+        return Response(body, content_type="text/csv; charset=utf-8",
+                        headers={"Content-Disposition": "attachment; filename=onaylanan_degisiklikler.csv"})
+
+    @app.route("/change/<int:change_id>/mark-applied", methods=["POST"])
+    def mark_applied_view(change_id):
+        load(change_id)
+        try:
+            mark_applied(get_db(), change_id)
+        except ValueError as e:
+            abort(400, str(e))
+        return redirect(url_for("approved_list"))
+
+    @app.route("/change/<int:change_id>/apply", methods=["POST"])
+    def apply_view(change_id):
+        load(change_id)
+        if publisher is None:
+            abort(404)  # siteye yazma ayarlanmamış (--wp-url verilmemiş)
+        try:
+            result = apply_change(get_db(), change_id, publisher)
+        except ValueError as e:
+            abort(400, str(e))
+        if result["status"] == "failed":
+            return render_approved(502, error=f"#{change_id} siteye uygulanamadı: {result['error']}")
+        return redirect(url_for("approved_list"))
+
     return app
 
 
@@ -132,5 +172,16 @@ if __name__ == "__main__":
     parser.add_argument("--db", default=DB_PATH)
     parser.add_argument("--brand", default=None, help="Başlıkların sonuna ' | MARKA' eklenir")
     parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--wp-url", default=None, help="WordPress sitesi; verilirse 'Siteye uygula' düğmesi açılır")
+    parser.add_argument("--wp-user", default=None)
+    parser.add_argument("--wp-plugin", choices=["yoast", "rankmath"], default="yoast")
     args = parser.parse_args()
-    create_app(args.db, brand=args.brand, model=args.model).run(host="127.0.0.1", port=5000)
+
+    publisher = None
+    if args.wp_url:
+        password = os.environ.get("WP_APP_PASSWORD")  # parola komut satırına yazılmaz (geçmişte kalır)
+        if not args.wp_user or not password:
+            parser.error("--wp-url için --wp-user ve WP_APP_PASSWORD ortam değişkeni gerekli")
+        from wordpress import WordPressPublisher
+        publisher = WordPressPublisher(args.wp_url, args.wp_user, password, args.wp_plugin)
+    create_app(args.db, brand=args.brand, model=args.model, publisher=publisher).run(host="127.0.0.1", port=5000)

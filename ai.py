@@ -15,7 +15,7 @@ import re
 import requests
 
 from context import build_context
-from site_profile import profile_for_run
+from site_profile import EXAMPLE_KEY_FOR_FIELD, profile_for_run
 from database import DB_PATH, get_connection, init_db
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
@@ -111,13 +111,40 @@ def strip_brand(value, brand):
     return " ".join(value.split()).strip(_SEPARATORS)
 
 
-def validate(field, value, old_value, facts, suffix="", banned=()):
+COPY_RUN = 5  # örnek/mevcut metinle bu kadar ardışık kelime ortaksa "kopya" sayılır
+_WORD = re.compile(r"\w+")
+
+
+def _words(text):
+    return _WORD.findall(_fold(text))
+
+
+def copied_phrase(text, avoid):
+    """text, avoid içindeki metinlerden biriyle COPY_RUN ardışık kelime paylaşıyorsa o diziyi (text'teki
+    yazımıyla) döndürür."""
+    words = _words(text)
+    shown = _WORD.findall(text)
+    if len(shown) != len(words):  # beklenmez; yine de güvenli tarafta kal
+        shown = words
+    other_grams = set()
+    for other in avoid:
+        other_words = _words(other)
+        other_grams.update(tuple(other_words[i:i + COPY_RUN]) for i in range(len(other_words) - COPY_RUN + 1))
+    for i in range(len(words) - COPY_RUN + 1):
+        if tuple(words[i:i + COPY_RUN]) in other_grams:
+            return " ".join(shown[i:i + COPY_RUN])
+    return None
+
+
+def validate(field, value, old_value, facts, suffix="", banned=(), avoid=()):
     """
     Önerilen metni kontrol eder. (temiz_metin, None) ya da (None, hata_mesajı) döndürür.
     facts : sayfada gerçekten yazan bilgiler (başlık, H1, eski meta, URL) — uydurmayı yakalamak için.
     suffix: koda ait ek (örn. ' | Marka'). Uzunluk ve "mevcutla aynı mı" kontrolü NİHAİ metne
             (öneri + ek) göre yapılır; döndürülen metin ekSİZdir.
     banned: kullanılmak istenmeyen ifadeler (site profilinden); sayfada geçse bile reddedilir.
+    avoid : sahibin örnek metinleri; bunlardan birebir kopyalanan ifade reddedilir (her sayfaya aynı
+            cümlenin girmesi "tekrar eden açıklama" sorununu yeniden üretir).
     """
     if not isinstance(value, str):
         return None, "öneri metin değil"
@@ -144,6 +171,13 @@ def validate(field, value, old_value, facts, suffix="", banned=()):
     for phrase in banned:
         if phrase and _fold(phrase) in folded_text:
             return None, f"kullanılmak istenmeyen bir ifade içeriyor: '{phrase}'"
+
+    words = _words(text)
+    if words and any(words == _words(other) for other in avoid):
+        return None, "örnek metinlerden birinin aynısı; bu sayfaya özgü yazılmalı"
+    copied = copied_phrase(text, avoid)
+    if copied:
+        return None, f"örnek veya mevcut metinden birebir ifade kopyalanmış ('{copied}'); bu sayfaya özgü, kendi cümlelerinle yaz"
 
     fact_numbers = set(re.findall(r"\d+", facts))
     extra = [n for n in re.findall(r"\d+", text) if n not in fact_numbers]
@@ -274,7 +308,7 @@ def build_messages(field, page, issues, max_len, brand_suffix, previous_error=No
 # Öneri üretimi
 # ----------------------------------------------------------------------------
 
-def propose(field, page, issues, chat, model, brand=None, context=None, banned=()):
+def propose(field, page, issues, chat, model, brand=None, context=None, banned=(), avoid=()):
     """
     Bir alan için öneri üretir. (öneri_sözlüğü | None, deneme_notları) döndürür.
     context: context.build_context sonucu ({"text", "extra_facts"}); yoksa bağlamsız çalışır.
@@ -287,6 +321,10 @@ def propose(field, page, issues, chat, model, brand=None, context=None, banned=(
     context_text = context["text"].replace(suffix, "") if suffix else context["text"]
     facts = " ".join(filter(None, [page["title"], page["h1_text"], page["meta_description"], page["url"],
                                    context["extra_facts"]]))
+
+    # Yalnızca sahibin örnek metinleri kopya kontrolüne girer. MEVCUT metin girmez: kısa bir açıklamayı
+    # genişletirken eski kelimeleri korumak doğaldır. Örnek başlıklardaki marka eki kodla eklendiği için atılır.
+    avoid_texts = [strip_brand(a, brand) if suffix else a for a in avoid]
 
     notes, previous_error = [], None
     for attempt in range(1, MAX_ATTEMPTS + 1):
@@ -302,7 +340,7 @@ def propose(field, page, issues, chat, model, brand=None, context=None, banned=(
 
         if suffix and isinstance(value, str):
             value = strip_brand(value, brand)  # marka kodla eklenir; model yazdıysa tekrar etmesin
-        clean, error = validate(field, value, old_value, facts, suffix=suffix, banned=banned)
+        clean, error = validate(field, value, old_value, facts, suffix=suffix, banned=banned, avoid=avoid_texts)
         if error is None:
             return {"field": field, "old": old_value, "new": clean + suffix, "reason": reason}, notes
         previous_error = error
@@ -319,20 +357,22 @@ def _latest_run_id(conn):
 
 
 def generate_suggestions(db_path=DB_PATH, run_id=None, limit=5, model=DEFAULT_MODEL,
-                         brand=None, chat=ollama_chat, discard_pending=False):
-    """discard_pending=True: bu taramadaki yalnızca BEKLEYEN önerileri silip yeniden üretir
-    (onaylanmış / reddedilmiş / uygulanmış kayıtlara dokunmaz)."""
+                         brand=None, chat=ollama_chat, discard_pending=False, discard_rejected=False):
+    """discard_pending / discard_rejected: bu taramadaki BEKLEYEN ve/veya REDDEDİLMİŞ önerileri silip
+    yeniden üretir. Reddedilmiş kayıt silinmedikçe o alan yeniden üretilmez. Onaylanmış ve
+    uygulanmış kayıtlara hiçbir zaman dokunulmaz."""
     init_db(db_path)
     conn = get_connection(db_path)
     conn.row_factory = None
     try:
         run_id = run_id or _latest_run_id(conn)
-        if discard_pending:
+        statuses = [st for st, on in (("pending", discard_pending), ("rejected", discard_rejected)) if on]
+        if statuses:
             deleted = conn.execute(
-                "DELETE FROM applied_changes WHERE status = 'pending' AND page_id IN "
-                "(SELECT id FROM pages WHERE crawl_run_id = ?)", (run_id,)).rowcount
+                f"DELETE FROM applied_changes WHERE status IN ({','.join('?' * len(statuses))}) AND page_id IN "
+                "(SELECT id FROM pages WHERE crawl_run_id = ?)", (*statuses, run_id)).rowcount
             conn.commit()
-            print(f"{deleted} bekleyen öneri silindi, yeniden üretilecek.")
+            print(f"{deleted} kayıt silindi ({', '.join(statuses)}), yeniden üretilecek.")
         profile = profile_for_run(conn, run_id)
         brand = brand or profile["brand_name"] or None  # --brand verilmediyse site profilindeki marka
         banned = profile["banned_phrases"]
@@ -382,7 +422,8 @@ def generate_suggestions(db_path=DB_PATH, run_id=None, limit=5, model=DEFAULT_MO
             for field, issues in todo.items():
                 ctx = build_context(conn, run_id, page, field, [i["code"] for i in issues], FIELD_FOR_CODE,
                                     profile)
-                proposal, notes = propose(field, page, issues, chat, model, brand, ctx, banned)
+                proposal, notes = propose(field, page, issues, chat, model, brand, ctx, banned,
+                                          avoid=profile[EXAMPLE_KEY_FOR_FIELD[field]])
                 report_lines.extend(f"[{field}] {n}" for n in notes)
                 if proposal is None:
                     summary["failed"] += 1
@@ -425,10 +466,13 @@ def main():
     parser.add_argument("--brand", default=None, help="Başlıkların sonuna ' | MARKA' eklenir (varsayılan: site profilindeki marka adı)")
     parser.add_argument("--discard-pending", action="store_true",
                         help="Bu taramadaki bekleyen önerileri silip yeniden üretir (onaylılara dokunmaz)")
+    parser.add_argument("--discard-rejected", action="store_true",
+                        help="Bu taramadaki REDDEDİLMİŞ önerileri de silip yeniden üretir")
     args = parser.parse_args()
 
     summary = generate_suggestions(args.db, args.run_id, args.limit, args.model, args.brand,
-                                   discard_pending=args.discard_pending)
+                                   discard_pending=args.discard_pending,
+                                   discard_rejected=args.discard_rejected)
     print(f"\nTarama #{summary['run_id']}: {summary['pages']} sayfa işlendi, "
           f"{summary['proposed']} öneri kaydedildi (bekliyor), {summary['failed']} öneri üretilemedi.")
     if summary["proposed"]:

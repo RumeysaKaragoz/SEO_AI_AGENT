@@ -1,0 +1,14 @@
+URL: http://localhost:8080/seotest --limit3
+Tarih: 2026-10-25 16:24:48
+
+ÖZET
+- Analiz edilen sayfa: 0
+- Erişilemeyen sayfa: 1
+- Sorun bulunan sayfa: 0
+- Toplam sorun: 0 (Kritik: 0, Uyarı: 0, Bilgi: 0)
+
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest --limit3
+- Erişilemedi: HTTP 404

@@ -4,6 +4,7 @@ import os
 import tempfile
 
 from app import create_app
+from apply_changes import PublishError, Publisher
 from database import get_connection
 
 
@@ -11,9 +12,20 @@ def j(value, reason="Gerekçe."):
     return json.dumps({"value": value, "reason": reason}, ensure_ascii=False)
 
 
-def make(rows, chat=None):
+class FakePublisher(Publisher):
+    def __init__(self, fail_first=False):
+        self.calls, self.fail_first = [], fail_first
+
+    def apply(self, change):
+        self.calls.append(change["id"])
+        if self.fail_first and len(self.calls) == 1:
+            raise PublishError("WordPress yanıt vermedi")
+
+
+def make(rows, chat=None, publisher=None):
     path = os.path.join(tempfile.mkdtemp(), "t.db")
-    app = create_app(path, brand="Marka", chat=chat or (lambda m, msgs, s: j("İthal Kürklü Ekose Mont 9009")))
+    app = create_app(path, brand="Marka", chat=chat or (lambda m, msgs, s: j("İthal Kürklü Ekose Mont 9009")),
+                     publisher=publisher)
     c = get_connection(path)
     c.execute("INSERT INTO sites (url) VALUES ('https://s.com')")
     c.execute("INSERT INTO crawl_runs (site_id, status) VALUES (1, 'completed')")
@@ -103,6 +115,40 @@ def main():
     assert post(app5, client5, "/change/1/reject").status_code == 302 and row(c5)[0] == "rejected"
     assert post(app5, client5, "/change/1/reject").status_code == 400
     print("OK  uyarısız onay doğrudan approved; ret rejected; ikinci ret 400")
+    app6, client6, c6 = make([("title", "Mont", "Onaylı Başlık Metni Burada", "approved"),
+                              ("meta_description", None, "=HYPERLINK(1)", "approved"),
+                              ("title", "x", "Bekleyen Başlık Metni Burada", "pending")])
+    html = client6.get("/approved").get_data(as_text=True)
+    assert "Onaylananlar (2)" in html and "Bekleyen Başlık" not in html and "Onaylı Başlık Metni Burada" in html
+    r = client6.get("/approved.csv")
+    body = r.get_data()
+    assert r.mimetype == "text/csv" and body.startswith(b"\xef\xbb\xbf") and "attachment" in r.headers["Content-Disposition"]
+    assert "Onaylı Başlık Metni Burada" in body.decode("utf-8-sig") and "'=HYPERLINK" in body.decode("utf-8-sig")
+    print("OK  /approved: yalnızca onaylılar; CSV indirme (BOM, ayraç, formül etkisizleştirme)")
+
+    assert client6.post("/change/1/mark-applied").status_code == 400 and row(c6)[0] == "approved"  # token yok
+    assert post(app6, client6, "/change/1/mark-applied").status_code == 302 and row(c6)[0] == "applied"
+    assert "Onaylananlar (1)" in client6.get("/approved").get_data(as_text=True)
+    assert post(app6, client6, "/change/1/mark-applied").status_code == 400   # zaten uygulandı
+    assert post(app6, client6, "/change/3/mark-applied").status_code == 400   # bekleyen kayıt
+    assert post(app6, client6, "/change/99/mark-applied").status_code == 404
+    print("OK  'Uygulandı olarak işaretle': token zorunlu; applied olunca listeden düştü; geçersiz geçişler reddedildi")
+    ROWS = [("title", "Mont", "Onaylı Başlık Metni Burada", "approved"),
+            ("title", "x", "Bekleyen Başlık Metni Burada", "pending")]
+    app7, client7, c7 = make(ROWS)                       # publisher yok: düğme de yok, rota da yok
+    assert 'action="/change/1/apply"' not in client7.get("/approved").get_data(as_text=True)
+    assert post(app7, client7, "/change/1/apply").status_code == 404 and row(c7)[0] == "approved"
+    pub = FakePublisher(fail_first=True)
+    app8, client8, c8 = make(ROWS, publisher=pub)
+    assert 'action="/change/1/apply"' in client8.get("/approved").get_data(as_text=True)
+    assert client8.post("/change/1/apply").status_code == 400 and pub.calls == []      # token yok
+    r = post(app8, client8, "/change/1/apply")                                          # 1. deneme başarısız
+    html = r.get_data(as_text=True)
+    assert r.status_code == 502 and "WordPress yanıt vermedi" in html and "son deneme başarısız" in html
+    assert row(c8)[0] == "failed"
+    assert post(app8, client8, "/change/1/apply").status_code == 302 and row(c8)[0] == "applied"  # yeniden deneme
+    assert post(app8, client8, "/change/2/apply").status_code == 400 and pub.calls == [1, 1]      # bekleyen: siteye gitmez
+    print("OK  siteye uygula: publisher yoksa kapalı; token zorunlu; hata mesajı + yeniden deneme; bekleyen kayıt siteye gitmedi")
     print("\nTüm arayüz testleri geçti.")
 
 

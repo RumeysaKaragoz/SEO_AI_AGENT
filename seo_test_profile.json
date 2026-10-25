@@ -1,0 +1,14 @@
+{
+  "brand_name": "Düşes Butik",
+  "example_titles": [
+    "İthal Kadın Giyim & Yeni Sezon Koleksiyonu | Düşes Butik",
+    "Şık & Kaliteli Kadın Bluz Modelleri | Düşes Butik",
+    "Özel Tasarım Kadın Ceket & Kaban | Düşes Butik"
+  ],
+  "example_meta_descriptions": [
+    "Özenle seçilmiş ithal kadın giyim ürünleri, elbise ve bluz modellerinde yeni sezon şıklığını Düşes Butik ile keşfedin. Güvenli alışveriş ve hızlı kargo.",
+    "Trend kadın giyim koleksiyonları, kaliteli kumaş yapısı ve şık tasarımlarla Düşes Butik'te. Tarzınızı yansıtacak en özel parçaları inceleyin.",
+    "Yeni sezon kadın ceket, kaban ve kombin parçalarında şıklığı yakalayın. Düşes Butik avantajlarıyla hemen online sipariş verin."
+  ],
+  "banned_phrases": ["en ucuz", "bedava", "şok fiyat", "ikinci el", "outlet", "çakma", "replika", "garantili"]
+}
