@@ -1,55 +1,98 @@
 {% extends "base.html" %}
 {% block title %}İncele #{{ change.id }}{% endblock %}
+{% block crumb %}İncele #{{ change.id }}{% endblock %}
+{% block content_class %}wide{% endblock %}
 {% block content %}
-<p><a href="{{ url_for('pending_list') }}">← Bekleyen öneriler</a></p>
-<h2>#{{ change.id }} · {{ field_name }}</h2>
-<p class="meta">{{ change.url }} · durum: {{ change.status }}</p>
-{% if error %}<p class="err">{{ error }}</p>{% endif %}
-{% if message %}<p class="ok">{{ message }}</p>{% endif %}
-{% if warning %}<p class="warn">{{ warning }}</p>{% endif %}
-{% if notes %}<ul class="meta">{% for n in notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}
-
-<div class="cols">
-  <section class="card">
-    <h3>AI analizi</h3>
-    <p class="label">Mevcut metin</p>
-    <p class="old">{{ change.current or "(yok)" }}</p>
-    <p class="label">Kayıtlı öneri / taslak</p>
-    <p class="new">{{ change.suggestion }}</p>
-    {% if change.reason %}<p class="meta">Neden: {{ change.reason }}</p>{% endif %}
-  </section>
-
-  <section class="card">
-    <h3>Ortak düzenleme</h3>
-    {% if change.status == 'pending' %}
-    <form method="post"
-          onsubmit="var b=event.submitter; if(b){setTimeout(function(){b.disabled=true;b.textContent='Çalışıyor…'},0)}">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-      <p class="label">Senin isteğin (ör. "ithal olsun")</p>
-      <textarea name="user_text" rows="2">{{ user_text or "" }}</textarea>
-      <button type="submit" formaction="{{ url_for('merge', change_id=change.id) }}">Ortak metin öner</button>
-      {% if merged %}<p class="meta">Neden: {{ merged.reason }}</p>{% endif %}
-
-      <p class="label">Son metin <span id="count"></span>
-        {% if limits %}<span class="meta">(önerilen {{ limits[0] }}–{{ limits[1] }} karakter)</span>{% endif %}</p>
-      <textarea name="final_text" id="final_text" rows="3">{{ final_text }}</textarea>
-      <button type="submit" formaction="{{ url_for('save', change_id=change.id) }}">Taslağı kaydet</button>
-      {% if need_confirm %}
-      <button type="submit" name="confirm" value="1" formaction="{{ url_for('approve_view', change_id=change.id) }}">Yine de onayla</button>
-      {% else %}
-      <button type="submit" formaction="{{ url_for('approve_view', change_id=change.id) }}">Onayla</button>
+<div class="split">
+  <section class="card site-pane">
+    <div class="pane-bar">
+      <span class="meta">{{ change.url }}</span>
+      {% if frame_url %}
+      <span>
+        <button type="button" id="reload-site">Yenile</button>
+        <a class="btn" href="{{ frame_url }}" target="_blank" rel="noopener noreferrer">Yeni sekmede aç ↗</a>
+      </span>
       {% endif %}
-      <button type="submit" formaction="{{ url_for('reject_view', change_id=change.id) }}">Reddet</button>
-      <p class="meta">Onay yalnızca veritabanına kaydedilir; canlı siteye hiçbir şey gönderilmez.</p>
-    </form>
-    <script>
-      var box = document.getElementById("final_text"), count = document.getElementById("count");
-      function update() { count.textContent = "(" + box.value.trim().replace(/\s+/g, " ").length + " karakter)"; }
-      box.addEventListener("input", update); update();
-    </script>
+    </div>
+    {% if frame_url %}
+    <iframe id="site" src="{{ frame_url }}" title="Site önizlemesi" referrerpolicy="no-referrer"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    <p class="meta">Sayfa boş görünüyorsa site çerçeve içinde açılmaya izin vermiyor olabilir; "Yeni sekmede aç"ı kullan.
+      Başlık ve meta açıklama sayfada görünmez, aşağıdaki Google önizlemesine bak.</p>
     {% else %}
-    <p class="meta">Bu kayıt artık bekliyor durumunda değil ({{ change.status }}); düzenlenemez.</p>
+    <p class="meta">Bu adres çerçevede açılamıyor.</p>
     {% endif %}
   </section>
+
+  <section>
+    <h2>#{{ change.id }} · {{ field_name }}</h2>
+    <p class="meta">{{ change.url }} · durum: {{ change.status }}</p>
+    {% if error %}<p class="err">{{ error }}</p>{% endif %}
+    {% if message %}<p class="ok">{{ message }}</p>{% endif %}
+    {% if warning %}<p class="warn">{{ warning }}</p>{% endif %}
+    {% if notes %}<ul class="meta">{% for n in notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}
+
+    <div class="card">
+      <h3>AI analizi</h3>
+      <p class="label">Mevcut metin</p>
+      <p class="old">{{ change.current or "(yok)" }}</p>
+      <p class="label">Kayıtlı öneri / taslak</p>
+      <p class="new">{{ change.suggestion }}</p>
+      {% if change.reason %}<p class="meta">Neden: {{ change.reason }}</p>{% endif %}
+    </div>
+
+    <div class="card">
+      <h3>Ortak düzenleme</h3>
+      {% if change.status == 'pending' %}
+      <form method="post"
+            onsubmit="var b=event.submitter; if(b){setTimeout(function(){b.disabled=true;b.textContent='Çalışıyor…'},0)}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <p class="label">Senin isteğin (ör. "ithal olsun")</p>
+        <textarea name="user_text" rows="2">{{ user_text or "" }}</textarea>
+        <button type="submit" formaction="{{ url_for('merge', change_id=change.id) }}">Ortak metin öner</button>
+        {% if merged %}<p class="meta">Neden: {{ merged.reason }}</p>{% endif %}
+
+        <p class="label">Son metin <span id="count"></span>
+          {% if limits %}<span class="meta">(önerilen {{ limits[0] }}–{{ limits[1] }} karakter)</span>{% endif %}</p>
+        <textarea name="final_text" id="final_text" rows="3">{{ final_text }}</textarea>
+        <div class="actions">
+          <button type="submit" formaction="{{ url_for('save', change_id=change.id) }}">Taslağı kaydet</button>
+          {% if need_confirm %}
+          <button type="submit" class="primary" name="confirm" value="1" formaction="{{ url_for('approve_view', change_id=change.id) }}">Yine de onayla</button>
+          {% else %}
+          <button type="submit" class="primary" formaction="{{ url_for('approve_view', change_id=change.id) }}">Onayla</button>
+          {% endif %}
+          <button type="submit" formaction="{{ url_for('reject_view', change_id=change.id) }}">Reddet</button>
+        </div>
+        <p class="meta">Onay yalnızca veritabanına kaydedilir; canlı siteye hiçbir şey gönderilmez.</p>
+      </form>
+      {% else %}
+      <p class="meta">Bu kayıt artık bekliyor durumunda değil ({{ change.status }}); düzenlenemez.</p>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3>Google'da görünüm <span class="meta">(yaklaşık)</span></h3>
+      <div class="serp-url">{{ change.url }}</div>
+      <div class="serp-title" id="serp-title"></div>
+      <div class="serp-desc" id="serp-desc"></div>
+    </div>
+  </section>
 </div>
+<script>
+  var field = {{ change.field|tojson }}, pageTitle = {{ (page_title or "")|tojson }},
+      pageMeta = {{ (page_meta or "")|tojson }}, saved = {{ change.suggestion|tojson }};
+  var box = document.getElementById("final_text"), count = document.getElementById("count");
+  function clip(s, n) { return s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s; }
+  function update() {
+    var v = (box ? box.value : saved).trim().replace(/\s+/g, " ");
+    if (count) { count.textContent = "(" + v.length + " karakter)"; }
+    document.getElementById("serp-title").textContent = clip(field === "title" ? v : pageTitle, 60) || "(başlık yok)";
+    document.getElementById("serp-desc").textContent = clip(field === "meta_description" ? v : pageMeta, 160) || "(açıklama yok)";
+  }
+  if (box) { box.addEventListener("input", update); }
+  update();
+  var reload = document.getElementById("reload-site");
+  if (reload) { reload.addEventListener("click", function () { var f = document.getElementById("site"); f.src = f.src; }); }
+</script>
 {% endblock %}

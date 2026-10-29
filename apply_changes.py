@@ -7,7 +7,7 @@ Onaylanan değişiklikleri siteye uygulama katmanı. Model buraya ERİŞEMEZ; ya
   2. Otomatik (ileride): sitenin API'sine göre bir Publisher yazılır, apply_change() onu çağırır.
      Başarısızlıkta kayıt 'failed' olur; yeniden denenebilir.
 
-Durum geçişleri: approved -> applied | failed, failed -> applied | failed.
+Durum geçişleri: approved -> applied | failed | pending, failed -> applied | failed | pending.
 Not: apply_change içinde site güncellendikten hemen sonra süreç ölürse kayıt 'approved' kalır;
 yeniden uygulamak zararsızdır (alan aynı değere ayarlanır).
 Geri alma ('reverted') henüz yok; eski değer old_value'da saklı.
@@ -67,6 +67,12 @@ def _transition(conn, change_id, allowed, new_status):
 def mark_applied(conn, change_id):
     """Elle uygulanan değişikliği 'applied' yapar (siteye hiçbir şey göndermez)."""
     _transition(conn, change_id, ("approved", "failed"), "applied")
+
+
+def reopen(conn, change_id):
+    """Onaylı (veya başarısız) değişikliği yeniden düzenlemek için 'pending'e geri alır. Siteye hiçbir şey göndermez;
+    'applied' kayıtlar geri alınamaz (site zaten değişti)."""
+    _transition(conn, change_id, ("approved", "failed"), "pending")
 
 
 def apply_change(conn, change_id, publisher):

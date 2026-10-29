@@ -11,7 +11,7 @@ import secrets
 from flask import Flask, Response, abort, g, redirect, render_template, request, url_for
 
 from ai import DEFAULT_MODEL, LIMITS, ollama_chat
-from apply_changes import apply_change, export_csv, list_unapplied, mark_applied
+from apply_changes import apply_change, export_csv, list_unapplied, mark_applied, reopen
 from database import DB_PATH, get_connection, init_db
 from editor import get_change, propose_merged, save_draft
 from review import approve, length_warning, list_pending, reject
@@ -35,9 +35,21 @@ def create_app(db_path=DB_PATH, brand=None, model=DEFAULT_MODEL, chat=ollama_cha
             if not secrets.compare_digest(sent.encode(), token.encode()):
                 abort(400, "Geçersiz istek (csrf_token)")
 
+    @app.after_request
+    def secure_headers(response):
+        # Bu arayüz hiçbir sitede çerçeve içinde açılamaz (onay düğmelerine tıklatma / clickjacking)
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Content-Security-Policy"] = "frame-ancestors 'none'"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
+
     @app.context_processor
-    def inject_token():
-        return {"csrf_token": token}
+    def inject_common():
+        db = get_db()
+        count = lambda where: db.execute(f"SELECT COUNT(*) FROM applied_changes WHERE {where}").fetchone()[0]
+        return {"csrf_token": token,
+                "pending_count": count("status = 'pending'"),
+                "unapplied_count": count("status IN ('approved', 'failed')")}
 
     def get_db():
         if "db" not in g:
@@ -60,9 +72,14 @@ def create_app(db_path=DB_PATH, brand=None, model=DEFAULT_MODEL, chat=ollama_cha
         change = load(change_id)
         if not ctx.get("final_text"):
             ctx["final_text"] = change["suggestion"]
+        page = get_db().execute("SELECT title, meta_description FROM pages WHERE id = ?",
+                                (change["page_id"],)).fetchone() or (None, None)
+        # Yalnızca http(s) adresleri çerçevede açılır (javascript: vb. adresler açılmaz)
+        frame_url = change["url"] if change["url"].startswith(("http://", "https://")) else None
         return render_template("change.html", change=change,
                                field_name=FIELD_NAMES.get(change["field"], change["field"]),
-                               limits=LIMITS.get(change["field"]), **ctx), status
+                               limits=LIMITS.get(change["field"]), page_title=page[0], page_meta=page[1],
+                               frame_url=frame_url, **ctx), status
 
     @app.route("/")
     def pending_list():
@@ -150,6 +167,15 @@ def create_app(db_path=DB_PATH, brand=None, model=DEFAULT_MODEL, chat=ollama_cha
         except ValueError as e:
             abort(400, str(e))
         return redirect(url_for("approved_list"))
+
+    @app.route("/change/<int:change_id>/reopen", methods=["POST"])
+    def reopen_view(change_id):
+        load(change_id)
+        try:
+            reopen(get_db(), change_id)
+        except ValueError as e:
+            abort(400, str(e))
+        return redirect(url_for("change_page", change_id=change_id))
 
     @app.route("/change/<int:change_id>/apply", methods=["POST"])
     def apply_view(change_id):

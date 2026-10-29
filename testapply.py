@@ -2,7 +2,7 @@
 import os
 import tempfile
 
-from apply_changes import (Publisher, PublishError, apply_change, export_csv, list_unapplied, mark_applied)
+from apply_changes import (Publisher, PublishError, apply_change, export_csv, list_unapplied, mark_applied, reopen)
 from database import get_connection, init_db
 
 
@@ -82,6 +82,15 @@ def main():
     expect_value_error(lambda: apply_change(c, 1, pub))  # zaten applied
     assert pub.calls == [], pub.calls
     print("OK  bekleyen / reddedilen / uygulanmış kayıtlar için publisher hiç çağrılmadı")
+    c = build_db()
+    reopen(c, 1)
+    assert row(c, 1)[0] == "pending" and row(c, 1)[1] is None
+    expect_value_error(lambda: reopen(c, 1))     # artık bekliyor
+    expect_value_error(lambda: reopen(c, 3))     # bekliyor
+    mark_applied(c, 2)
+    expect_value_error(lambda: reopen(c, 2))     # uygulanmış: geri alınamaz
+    assert row(c, 2)[0] == "applied"
+    print("OK  beklemeye geri alma: approved -> pending; bekleyen/uygulanmış kayıt reddedildi")
     print("\nTüm uygulama katmanı testleri geçti.")
 
 

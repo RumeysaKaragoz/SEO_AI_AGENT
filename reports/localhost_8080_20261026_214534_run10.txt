@@ -1,0 +1,123 @@
+URL: http://localhost:8080/seotest/
+Tarih: 2026-10-26 21:45:34
+
+ÖZET
+- Analiz edilen sayfa: 14
+- Erişilemeyen sayfa: 0
+- Sorun bulunan sayfa: 14
+- Toplam sorun: 58 (Kritik: 0, Uyarı: 26, Bilgi: 32)
+
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [UYARI] Site geneli: http://localhost:8080/sitemap.xml bulunamadı ve robots.txt'te Sitemap satırı yok.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Open Graph etiketleri eksik: og:description, og:image
+- [BİLGİ] Site geneli: http://localhost:8080/robots.txt bulunamadı veya geçerli bir robots.txt değil.
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/10-2
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [UYARI] Sayfada <h1> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/bluz-en-guzel-bluz-modelleri-ve-bluz-cesitleri-burada
+- [UYARI] <title> etiketi 55 karakterden uzun (79); arama sonuçlarında kesilebilir.
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Open Graph etiketleri eksik: og:image
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/cok-satanlar
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/erkek-atlet-modelleri-ve-kadin-atlet-cesitleri-en-ucuz-atlet-fiyatlari-ile-burada
+- [UYARI] <title> etiketi 55 karakterden uzun (106); arama sonuçlarında kesilebilir.
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Open Graph etiketleri eksik: og:image
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/ornek-sayfa
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Open Graph etiketleri eksik: og:image
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/rahat-ama-sik-duses-butik-stili-ile-gunluk-kombin-onerileri
+- [UYARI] <title> etiketi 55 karakterden uzun (84); arama sonuçlarında kesilebilir.
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Open Graph etiketleri eksik: og:image
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/takim
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/merhaba-dunya
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Open Graph etiketleri eksik: og:image
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/wp-admin
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [UYARI] Sayfada <link rel='canonical'> etiketi bulunamadı.
+- [UYARI] Aynı <title> başka sayfalarda da kullanılıyor: http://localhost:8080/seotest/wp-login.php
+- [UYARI] Bu sayfanın içeriği başka sayfalarla birebir aynı: http://localhost:8080/seotest/wp-login.php
+- [BİLGİ] Sayfada birden fazla <h1> etiketi bulunuyor (2).
+- [BİLGİ] Open Graph etiketleri eksik: og:title, og:description, og:image
+- [BİLGİ] Sayfada <meta name='twitter:card'> etiketi bulunamadı.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/category/genel
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Open Graph etiketleri eksik: og:description, og:image
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/author/rmeysa
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [BİLGİ] 8 adet <a> etiketi href="#" veya javascript: kullanıyor; arama motorları bu bağlantıları izleyemez.
+- [BİLGİ] Open Graph etiketleri eksik: og:description
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/wp-login.php?action=lostpassword
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [UYARI] Sayfada <link rel='canonical'> etiketi bulunamadı.
+- [BİLGİ] Sayfada birden fazla <h1> etiketi bulunuyor (2).
+- [BİLGİ] Open Graph etiketleri eksik: og:title, og:description, og:image
+- [BİLGİ] Sayfada <meta name='twitter:card'> etiketi bulunamadı.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.
+
+============================================================
+
+Sayfa: http://localhost:8080/seotest/wp-login.php
+- [UYARI] Sayfada <meta name='description'> etiketi bulunamadı.
+- [UYARI] Sayfada <link rel='canonical'> etiketi bulunamadı.
+- [UYARI] Aynı <title> başka sayfalarda da kullanılıyor: http://localhost:8080/seotest/wp-admin
+- [UYARI] Bu sayfanın içeriği başka sayfalarla birebir aynı: http://localhost:8080/seotest/wp-admin
+- [BİLGİ] Sayfada birden fazla <h1> etiketi bulunuyor (2).
+- [BİLGİ] Open Graph etiketleri eksik: og:title, og:description, og:image
+- [BİLGİ] Sayfada <meta name='twitter:card'> etiketi bulunamadı.
+- [BİLGİ] Sayfada yapılandırılmış veri (<script type='application/ld+json'>) bulunamadı.

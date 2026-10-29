@@ -149,6 +149,31 @@ def main():
     assert post(app8, client8, "/change/1/apply").status_code == 302 and row(c8)[0] == "applied"  # yeniden deneme
     assert post(app8, client8, "/change/2/apply").status_code == 400 and pub.calls == [1, 1]      # bekleyen: siteye gitmez
     print("OK  siteye uygula: publisher yoksa kapalı; token zorunlu; hata mesajı + yeniden deneme; bekleyen kayıt siteye gitmedi")
+    # beklemeye geri al
+    app9, client9, c9 = make([("title", "Mont", "Onaylı Başlık Metni Burada", "approved"),
+                              ("title", "x", "Uygulanmış Başlık Metni Burada", "applied")])
+    assert "Beklemeye geri al" in client9.get("/approved").get_data(as_text=True)
+    assert client9.post("/change/1/reopen").status_code == 400 and row(c9)[0] == "approved"   # token yok
+    r = post(app9, client9, "/change/1/reopen")
+    assert r.status_code == 302 and r.headers["Location"].endswith("/change/1") and row(c9)[0] == "pending"
+    assert ">Onayla</button>" in client9.get("/change/1").get_data(as_text=True)        # yeniden düzenlenebilir
+    assert post(app9, client9, "/change/1/reopen").status_code == 400                   # artık bekliyor
+    assert post(app9, client9, "/change/2/reopen").status_code == 400 and row(c9, 2)[0] == "applied"  # uygulanan geri alınamaz
+    print("OK  'Beklemeye geri al': token zorunlu; approved -> pending, yeniden düzenlenebilir; applied geri alınamaz")
+
+    # yan yana ekran: çerçeve, güvenlik başlıkları, Google önizlemesi, kenar menü sayıları
+    html = client.get("/change/1")
+    body = html.get_data(as_text=True)
+    assert '<iframe id="site" src="https://s.com/urun/x"' in body and "sandbox=" in body
+    assert "allow-top-navigation" not in body                                           # çerçevedeki site bizi yönlendiremez
+    assert html.headers["X-Frame-Options"] == "DENY" and "frame-ancestors 'none'" in html.headers["Content-Security-Policy"]
+    assert "serp-title" in body and "Google'da görünüm" in body
+    assert ">Bekleyenler</span>" in body and ">Onaylananlar</span>" in body
+    c.execute("UPDATE pages SET url = 'javascript:alert(1)'")
+    c.commit()
+    body = client.get("/change/1").get_data(as_text=True)
+    assert "<iframe" not in body and "çerçevede açılamıyor" in body                      # http(s) dışı adres açılmaz
+    print("OK  yan yana ekran: site çerçevede, sandbox (üst pencereye yönlendirme yok), clickjacking başlıkları, Google önizlemesi; javascript: adresi açılmıyor")
     print("\nTüm arayüz testleri geçti.")
 
 
