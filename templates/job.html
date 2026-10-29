@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }}{% endblock %}
+{% block crumb %}İş{% endblock %}
+{% block content %}
+<h2>{{ job.title }} <span class="badge {{ job.state }}" id="state">{{ job.state }}</span></h2>
+<pre class="log" id="log">{{ job.lines[-200:]|join("\n") }}</pre>
+{% if job.state == 'running' %}
+<form method="post" action="{{ url_for('job_cancel', job_id=job.id) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+  <button type="submit">İptal et</button>
+  <span class="meta">İptal bir sonraki sayfada etkili olur; tarama iptal edilirse sonuçlar kaydedilmez.</span>
+</form>
+{% else %}
+<div class="card">
+  {% if job.error %}<p class="err">{{ job.error }}</p>{% endif %}
+  {% if job.state == 'cancelled' %}<p class="warn">İş iptal edildi.</p>{% endif %}
+  {% if job.result %}
+  <h3>Sonuç</h3>
+  <table>{% for key, value in job.result.items() %}<tr><td>{{ key }}</td><td>{{ value }}</td></tr>{% endfor %}</table>
+  {% endif %}
+  <div class="actions">
+    {% if job.state == 'done' and job.kind == 'crawl' and job.result %}
+      <a class="btn" href="{{ url_for('run_report', run_id=job.result.run_id) }}">Sonuçları gör</a>
+      <a class="btn primary" href="{{ url_for('suggest_page', run_id=job.result.run_id) }}">Bu taramada öneri üret</a>
+    {% elif job.state == 'done' and job.kind == 'suggest' %}
+      <a class="btn primary" href="{{ url_for('pending_list') }}">Önerileri incele</a>
+    {% else %}
+      <a class="btn" href="{{ url_for('dashboard') }}">Panele dön</a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% if job.state == 'running' %}
+<script>
+  var log = document.getElementById("log"), statusUrl = {{ url_for('job_status', job_id=job.id)|tojson }};
+  log.scrollTop = log.scrollHeight;
+  var timer = setInterval(function () {
+    fetch(statusUrl).then(function (r) { return r.json(); }).then(function (j) {
+      log.textContent = j.lines.join("\n"); log.scrollTop = log.scrollHeight;
+      if (j.state !== "running") { clearInterval(timer); location.reload(); }
+    });
+  }, 1500);
+</script>
+{% endif %}
+{% endblock %}

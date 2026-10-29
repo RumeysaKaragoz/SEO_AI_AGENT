@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Site tara{% endblock %}
+{% block crumb %}Site tara{% endblock %}
+{% block content %}
+<h2>Site tara</h2>
+{% if error %}<p class="err">{{ error }}</p>{% endif %}
+<div class="card">
+  <form method="post" action="{{ url_for('crawl_start') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <p class="label">Site adresi</p>
+    <input type="text" name="url" value="{{ form.url }}" placeholder="https://www.ornek.com" required>
+    <div class="grid2">
+      <div><p class="label">En fazla sayfa</p><input type="number" name="max_pages" min="1" max="500" value="{{ form.max_pages }}"></div>
+      <div><p class="label">Sayfalar arası bekleme (sn)</p><input type="number" name="delay" min="0" max="10" step="0.1" value="{{ form.delay }}"></div>
+    </div>
+    <button type="submit" class="primary">Taramayı başlat</button>
+    <p class="meta">Yalnızca sahibi olduğun veya izin aldığın siteleri tara. Tarama dakikalar sürebilir; ilerlemeyi bir sonraki ekranda görürsün.</p>
+  </form>
+</div>
+<h3>Önceki taramalar</h3>
+<div class="card">
+{% if runs %}
+<table>
+  <tr><th>#</th><th>Site</th><th>Tarih</th><th>Durum</th><th>Sayfa</th><th>Sorun</th><th></th></tr>
+  {% for r in runs %}
+  <tr><td>{{ r[0] }}</td><td>{{ r[1] }}</td><td>{{ r[2] }}</td><td><span class="badge {{ r[3] }}">{{ r[3] }}</span></td>
+      <td>{{ r[4] }}</td><td>{{ r[5] }}</td><td><a href="{{ url_for('run_report', run_id=r[0]) }}">Sonuçlar</a></td></tr>
+  {% endfor %}
+</table>
+{% else %}<p class="empty">Henüz tarama yok.</p>{% endif %}
+</div>
+{% endblock %}

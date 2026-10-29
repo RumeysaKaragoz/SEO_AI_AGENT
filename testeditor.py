@@ -105,6 +105,11 @@ def main():
     expect_value_error(lambda: save_draft(build_db(), 1, "   "))
     expect_value_error(lambda: save_draft(build_db(), 99, "x"))
     print("OK  taslak kaydedildi (pending kaldı), uzunluk uyarısı döndü, review.approve taslağı onayladı, onaylı kayda yazılamadı")
+    from ai import LIMITS
+    from editor.editor import EXAMPLES
+    for field, (_, answer) in EXAMPLES.items():   # örnek cevap, alanın uzunluk sınırına uymalı (model örneğe uyar)
+        assert LIMITS[field][0] <= len(answer["value"]) <= LIMITS[field][1], (field, answer)
+    print("OK  ortak metin örnekleri alanın uzunluk sınırına uygun (meta description örneği başlık kadar kısa değil)")
     print("\nTüm editor testleri geçti.")
 
 

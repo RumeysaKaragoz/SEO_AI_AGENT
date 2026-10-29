@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Panel{% endblock %}
+{% block crumb %}Panel{% endblock %}
+{% block content %}
+<h2>Panel</h2>
+<div class="stats">
+  <div class="stat"><b>{{ counts.get('pending', 0) }}</b><span class="meta">bekleyen öneri</span></div>
+  <div class="stat"><b>{{ counts.get('approved', 0) + counts.get('failed', 0) }}</b><span class="meta">uygulanmayı bekleyen</span></div>
+  <div class="stat"><b>{{ counts.get('applied', 0) }}</b><span class="meta">uygulanan</span></div>
+  <div class="stat"><b>{{ counts.get('rejected', 0) }}</b><span class="meta">reddedilen</span></div>
+</div>
+<div class="card">
+  <h3>İş akışı</h3>
+  <p class="meta">1. Siteyi tara → 2. Öneri üret → 3. Önerileri incele ve onayla → 4. WordPress'e uygula</p>
+  <div class="actions">
+    <a class="btn primary" href="{{ url_for('crawl_page') }}">1. Site tara</a>
+    <a class="btn primary" href="{{ url_for('suggest_page') }}">2. Öneri üret</a>
+    <a class="btn primary" href="{{ url_for('pending_list') }}">3. İncele</a>
+    <a class="btn primary" href="{{ url_for('approved_list') }}">4. Uygula</a>
+  </div>
+</div>
+<div class="card">
+  <h3>Son tarama</h3>
+  {% if latest %}
+  <p>#{{ latest[0] }} · {{ latest[1] }} · {{ latest[2] }} · {{ latest[4] }} sayfa · {{ latest[5] }} sorun
+     · <a href="{{ url_for('run_report', run_id=latest[0]) }}">Sonuçları gör</a></p>
+  {% else %}<p class="empty">Henüz tarama yok. Önce "Site tara".</p>{% endif %}
+</div>
+<div class="card">
+  <h3>Durum</h3>
+  <p>WordPress: {% if wp_connected %}<span class="badge done">bağlı</span>{% else %}<span class="badge">bağlı değil</span>
+     — <a href="{{ url_for('wordpress_page') }}">bağlan</a>{% endif %}</p>
+  {% if last_job %}<p>Son iş: <a href="{{ url_for('job_page', job_id=last_job.id) }}">{{ last_job.title }}</a>
+     <span class="badge {{ last_job.state }}">{{ last_job.state }}</span></p>{% endif %}
+</div>
+{% endblock %}

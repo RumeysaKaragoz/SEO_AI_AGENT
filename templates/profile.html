@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Site profili{% endblock %}
+{% block crumb %}Site profili{% endblock %}
+{% block content %}
+<h2>Site profili</h2>
+{% if not sites %}
+<p class="empty">Henüz site yok. Önce bir <a href="{{ url_for('crawl_page') }}">tarama</a> yap.</p>
+{% else %}
+<p class="meta">Marka adı başlıklara ' | Marka' olarak eklenir. Örnekler modele üslup için gösterilir; yasaklı ifadeler öneride geçerse reddedilir.</p>
+<form method="get"><p class="label">Site</p>
+  <select name="site_id" onchange="this.form.submit()">{% for s in sites %}<option value="{{ s[0] }}" {% if s[0] == site_id %}selected{% endif %}>{{ s[1] }}</option>{% endfor %}</select></form>
+{% if message %}<p class="ok">{{ message }}</p>{% endif %}
+{% for w in warnings %}<p class="warn">uyarı: {{ w }}</p>{% endfor %}
+<div class="card">
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="hidden" name="site_id" value="{{ site_id }}">
+    <p class="label">Marka adı</p><input type="text" name="brand_name" value="{{ profile.brand_name }}">
+    <p class="label">Beğenilen örnek başlıklar (her satıra bir tane)</p>
+    <textarea name="example_titles" rows="4">{{ profile.example_titles|join("\n") }}</textarea>
+    <p class="label">Beğenilen örnek meta açıklamalar (her satıra bir tane)</p>
+    <textarea name="example_meta_descriptions" rows="5">{{ profile.example_meta_descriptions|join("\n") }}</textarea>
+    <p class="label">Kullanılmasını istemediğin ifadeler (her satıra bir tane)</p>
+    <textarea name="banned_phrases" rows="4">{{ profile.banned_phrases|join("\n") }}</textarea>
+    <button type="submit" class="primary">Kaydet</button>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

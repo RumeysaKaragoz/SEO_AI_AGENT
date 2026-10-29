@@ -40,13 +40,23 @@ def get_change(conn, change_id):
 # Ortak metin: AI önerisi + kullanıcının isteği
 # ----------------------------------------------------------------------------
 
-EXAMPLE = (
-    "Mevcut metin: Düşes Giyim\n"
-    "AI önerisi: Düşes Giyim\n"
-    "Kullanıcının isteği: Düşes ithal giyim olsun",
-    {"value": "Düşes İthal Giyim",
-     "reason": "Kullanıcının istediği 'ithal' ifadesi marka adıyla birlikte kullanıldı."},
-)
+# Küçük modeller örnekten öğrenir: örnek, alanın uzunluğuna uygun olmalı (başlık örneği meta description'ı kısa yazdırır)
+EXAMPLES = {
+    "title": (
+        "Mevcut metin: Düşes Giyim\n"
+        "AI önerisi: Düşes Giyim\n"
+        "Kullanıcının isteği: Düşes ithal giyim olsun",
+        {"value": "Düşes İthal Giyim",
+         "reason": "Kullanıcının istediği 'ithal' ifadesi marka adıyla birlikte kullanıldı."},
+    ),
+    "meta_description": (
+        "Mevcut metin: elbise\n"
+        "AI önerisi: Elbise modellerini inceleyin.\n"
+        "Kullanıcının isteği: ithal ve kaliteli olduğundan bahset",
+        {"value": "İthal ve kaliteli elbise modellerini inceleyin, size uygun olanı seçip hemen sipariş verin.",
+         "reason": "Kullanıcının istediği 'ithal' ve 'kaliteli' ifadeleri tam cümlede kullanıldı."},
+    ),
+}
 
 
 def _merge_messages(field, current, suggestion, user_text, max_len, previous_error=None, brand_suffix=False,
@@ -77,7 +87,7 @@ def _merge_messages(field, current, suggestion, user_text, max_len, previous_err
              f"Kullanıcının isteği: {user_text}"]
     if previous_error:
         lines.append(f"Önceki öneri reddedildi: {previous_error}. Kuralları dikkate alarak yeniden yaz.")
-    example_user, example_answer = EXAMPLE
+    example_user, example_answer = EXAMPLES[field]
     return [
         {"role": "system", "content": system},
         {"role": "user", "content": example_user},

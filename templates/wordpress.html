@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}WordPress{% endblock %}
+{% block crumb %}WordPress{% endblock %}
+{% block content %}
+<h2>WordPress bağlantısı</h2>
+{% if error %}<p class="err">{{ error }}</p>{% endif %}
+{% if message %}<p class="ok">{{ message }}</p>{% endif %}
+{% if warning %}<p class="warn">{{ warning }}</p>{% endif %}
+{% if info %}
+<div class="card">
+  <p><span class="badge done">bağlı</span> {{ info.url }} · kullanıcı: {{ info.user }}</p>
+  <form method="post" action="{{ url_for('wordpress_disconnect') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button type="submit">Bağlantıyı kes</button>
+  </form>
+</div>
+{% endif %}
+<div class="card">
+  <h3>{% if info %}Yeniden bağlan{% else %}Bağlan{% endif %}</h3>
+  <form method="post" action="{{ url_for('wordpress_connect') }}" autocomplete="off">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <p class="label">WordPress adresi (kök dizin)</p>
+    <input type="text" name="url" value="{{ form.url }}" placeholder="http://localhost:8080/seotest">
+    <div class="grid2">
+      <div><p class="label">Kullanıcı adı</p><input type="text" name="user" value="{{ form.user }}"></div>
+      <div><p class="label">SEO eklentisi</p>
+        <select name="plugin"><option value="yoast" {% if form.plugin == 'yoast' %}selected{% endif %}>Yoast SEO</option>
+          <option value="rankmath" {% if form.plugin == 'rankmath' %}selected{% endif %}>Rank Math</option></select></div>
+    </div>
+    <p class="label">Uygulama parolası (Kullanıcılar → Profil → Uygulama Parolaları)</p>
+    <input type="password" name="password" autocomplete="new-password">
+    <button type="submit" class="primary">Bağlan ve kontrol et</button>
+    <p class="meta">Parola yalnızca bellekte tutulur, diske yazılmaz; uygulamayı yeniden başlatınca tekrar girmen gerekir.
+      Siteye yazmak için <code>wp_seo_rest.php</code> dosyası sitede kurulu olmalı.</p>
+  </form>
+</div>
+{% endblock %}

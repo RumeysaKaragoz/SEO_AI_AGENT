@@ -35,6 +35,15 @@
     .old { color:#888; margin:.3rem 0; } .new { font-weight:600; margin:.3rem 0; }
     .warn { color:var(--warn); font-size:.9rem; } .err { color:var(--err); } .ok { color:var(--ok); }
     .empty { color:var(--muted); }
+    input[type=text], input[type=number], input[type=password], select { width:100%; font:inherit; padding:.5rem .6rem; border:1px solid var(--line); border-radius:8px; background:#fff; }
+    .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    table { width:100%; border-collapse:collapse; font-size:.88rem; } th, td { text-align:left; padding:.5rem .6rem; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { color:var(--muted); font-weight:600; font-size:.78rem; }
+    .badge { display:inline-block; border-radius:999px; padding:1px 9px; font-size:.75rem; background:#eef2ff; color:var(--accent); }
+    .badge.done, .badge.completed { background:#dcfce7; color:var(--ok); } .badge.failed, .badge.cancelled { background:#fee2e2; color:var(--err); } .badge.running { background:#fef3c7; color:var(--warn); }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:1rem; } .stat { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:.9rem 1rem; } .stat b { display:block; font-size:1.6rem; }
+    pre.log { background:#0f172a; color:#e2e8f0; border-radius:10px; padding:.9rem; max-height:420px; overflow:auto; font-size:.8rem; white-space:pre-wrap; overflow-wrap:anywhere; }
+    .sev-critical { color:var(--err); font-weight:600; } .sev-warning { color:var(--warn); } .sev-info { color:var(--muted); }
     textarea { width:100%; font:inherit; padding:.55rem; border:1px solid var(--line); border-radius:8px; }
     button, a.btn { font:inherit; font-size:.9rem; padding:.45rem .9rem; border:1px solid var(--line); border-radius:8px;
                     background:#fff; color:var(--ink); cursor:pointer; text-decoration:none; display:inline-block; margin:.25rem .25rem 0 0; }
@@ -50,6 +59,7 @@
     .serp-title { color:#1a0dab; font-size:1.15rem; margin:.1rem 0; }
     .serp-desc { color:#4d5156; font-size:.9rem; }
     @media (max-width: 1000px) {
+      .stats { grid-template-columns:repeat(2,1fr); } .grid2 { grid-template-columns:1fr; }
       .app { grid-template-columns:1fr; } .sidebar { position:static; height:auto; }
       .split { grid-template-columns:1fr; } .site-pane { position:static; height:60vh; }
     }
@@ -63,11 +73,19 @@
         <span class="brand-icon">S</span>
         <span>SEO Agent<small>Düzenleme paneli</small></span>
       </a>
+      <a class="nav-item {% if ep == 'dashboard' %}active{% endif %}" href="{{ url_for('dashboard') }}"><span>Panel</span></a>
+      <div class="menu-label">İŞLEMLER</div>
+      <a class="nav-item {% if ep in ('crawl_page','crawl_start','run_report') %}active{% endif %}" href="{{ url_for('crawl_page') }}"><span>Site tara</span></a>
+      <a class="nav-item {% if ep in ('suggest_page','suggest_start') %}active{% endif %}" href="{{ url_for('suggest_page') }}"><span>Öneri üret</span></a>
+      {% if active_job %}<a class="nav-item" href="{{ url_for('job_page', job_id=active_job.id) }}"><span>● {{ active_job.title }}</span></a>{% endif %}
       <div class="menu-label">İNCELEME</div>
       <a class="nav-item {% if ep in ('pending_list','change_page','merge','save','approve_view','reject_view') %}active{% endif %}"
          href="{{ url_for('pending_list') }}"><span>Bekleyenler</span><span class="nav-count">{{ pending_count }}</span></a>
       <a class="nav-item {% if ep in ('approved_list','apply_view','mark_applied_view','reopen_view') %}active{% endif %}"
          href="{{ url_for('approved_list') }}"><span>Onaylananlar</span><span class="nav-count">{{ unapplied_count }}</span></a>
+      <div class="menu-label">AYARLAR</div>
+      <a class="nav-item {% if ep == 'profile_page' %}active{% endif %}" href="{{ url_for('profile_page') }}"><span>Site profili</span></a>
+      <a class="nav-item {% if ep in ('wordpress_page','wordpress_connect','wordpress_disconnect') %}active{% endif %}" href="{{ url_for('wordpress_page') }}"><span>WordPress</span></a>
       <div class="sidebar-note">Yalnızca bu bilgisayardan erişilir. Canlı siteye, onay verip "uygula" demeden hiçbir şey gönderilmez.</div>
     </aside>
     <main class="main">

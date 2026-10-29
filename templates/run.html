@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Tarama #{{ run[0] }}{% endblock %}
+{% block crumb %}Tarama #{{ run[0] }}{% endblock %}
+{% block content %}
+<h2>Tarama #{{ run[0] }} <span class="badge {{ run[3] }}">{{ run[3] }}</span></h2>
+<p class="meta">{{ run[1] }} · {{ run[2] }} · {{ run[4] }} sayfa · {{ run[5] }} sorun</p>
+{% if run[3] == 'completed' %}<p><a class="btn primary" href="{{ url_for('suggest_page', run_id=run[0]) }}">Bu taramada öneri üret</a></p>{% endif %}
+<div class="stats">
+  {% for key, label in severities.items() %}
+  <div class="stat"><b>{{ by_severity.get(key, 0) }}</b><a href="{{ url_for('run_report', run_id=run[0], severity=key) }}">{{ label }}</a></div>
+  {% endfor %}
+  <div class="stat"><b>{{ run[5] }}</b><a href="{{ url_for('run_report', run_id=run[0]) }}">Tümü</a></div>
+</div>
+{% if top %}
+<div class="card"><h3>En sık görülen sorunlar</h3>
+  <table>{% for code, sev, n in top %}<tr><td>{{ code }}</td><td class="sev-{{ sev }}">{{ severities.get(sev, sev) }}</td><td>{{ n }} sayfa</td></tr>{% endfor %}</table>
+</div>
+{% endif %}
+<div class="card"><h3>Sayfalar{% if severity %} — {{ severities[severity] }}{% endif %}</h3>
+{% for p in pages %}
+  <p><strong>{{ p[1] }}</strong>{% if p[3] %} <span class="err">erişilemedi: {{ p[3] }}</span>{% endif %}</p>
+  <ul>{% for sev, message in issues.get(p[0], []) %}<li class="sev-{{ sev }}">{{ message }}</li>{% else %}<li class="meta">Sorun yok</li>{% endfor %}</ul>
+{% else %}<p class="empty">Gösterilecek sayfa yok.</p>{% endfor %}
+</div>
+{% endblock %}

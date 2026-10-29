@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 
 import requests
 
-from apply_changes import PublishError, Publisher
+from editor.apply_changes import PublishError, Publisher
 
 SEO_META_KEYS = {
     "yoast": {"title": "_yoast_wpseo_title", "meta_description": "_yoast_wpseo_metadesc"},
@@ -73,6 +73,18 @@ class WordPressPublisher(Publisher):
                     return route, item["id"]
         raise PublishError("WordPress'te bu adrese ait sayfa/yazı bulunamadı "
                            "(kategori ve ürün sayfaları desteklenmiyor)")
+
+    def check(self):
+        """Bağlantıyı doğrular. (kullanıcı adı, SEO alanları REST'e açık mı: True / False / None=sitede sayfa yok)."""
+        me = self._request("GET", "/wp-json/wp/v2/users/me", params={"context": "edit"})
+        name = me.get("name") if isinstance(me, dict) else None
+        pages = self._request("GET", "/wp-json/wp/v2/pages",
+                              params={"per_page": 1, "context": "edit", "_fields": "id,meta"})
+        exposed = None
+        if isinstance(pages, list) and pages:
+            meta = pages[0].get("meta")
+            exposed = isinstance(meta, dict) and all(k in meta for k in self.keys.values())
+        return name, exposed
 
     def apply(self, change):
         key = self.keys.get(change["field"])

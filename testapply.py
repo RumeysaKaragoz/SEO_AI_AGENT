@@ -2,7 +2,7 @@
 import os
 import tempfile
 
-from apply_changes import (Publisher, PublishError, apply_change, export_csv, list_unapplied, mark_applied, reopen)
+from editor.apply_changes import (Publisher, PublishError, apply_change, export_csv, list_unapplied, mark_applied, reopen)
 from database import get_connection, init_db
 
 

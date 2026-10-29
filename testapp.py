@@ -4,7 +4,7 @@ import os
 import tempfile
 
 from app import create_app
-from apply_changes import PublishError, Publisher
+from editor.apply_changes import PublishError, Publisher
 from database import get_connection
 
 
@@ -51,11 +51,11 @@ PENDING = [("title", "Mont", "Kürklü Ekose Mont 9009 | Marka", "pending")]
 
 
 def main():
-    empty = make([])[1].get("/")
+    empty = make([])[1].get("/pending")
     assert "Bekleyen öneri yok" in empty.get_data(as_text=True)
     app, client, c = make(PENDING + [("meta_description", None, "Kısa", "pending"),
                                       ("title", "Eski", "Onaylı Başlık Metni Burada", "approved")])
-    html = client.get("/").get_data(as_text=True)
+    html = client.get("/pending").get_data(as_text=True)
     assert "Bekleyen öneriler (2)" in html and "Onaylı Başlık" not in html
     assert 'href="/change/1"' in html and "uyarı: 4 karakter" in html
     print("OK  liste: yalnızca bekleyenler, İncele bağlantısı, uzunluk uyarısı")

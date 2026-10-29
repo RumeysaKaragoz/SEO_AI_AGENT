@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Öneri üret{% endblock %}
+{% block crumb %}Öneri üret{% endblock %}
+{% block content %}
+<h2>Öneri üret</h2>
+{% if error %}<p class="err">{{ error }}</p>{% endif %}
+{% if not runs %}
+<p class="empty">Önce bir <a href="{{ url_for('crawl_page') }}">tarama</a> yapman gerekiyor.</p>
+{% else %}
+<div class="card">
+  <form method="post" action="{{ url_for('suggest_start') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <p class="label">Tarama</p>
+    <select name="run_id">
+      {% for r in runs %}<option value="{{ r[0] }}" {% if (selected or runs[0][0]) == r[0] %}selected{% endif %}>#{{ r[0] }} · {{ r[1] }} · {{ r[2] }} · {{ r[4] }} sayfa</option>{% endfor %}
+    </select>
+    <div class="grid2">
+      <div><p class="label">En fazla kaç sayfa için</p><input type="number" name="limit" min="1" max="200" value="{{ form.limit }}"></div>
+      <div><p class="label">Model (Ollama)</p><input type="text" name="model" value="{{ model }}"></div>
+    </div>
+    <p class="label">Marka (boşsa site profilindeki kullanılır)</p>
+    <input type="text" name="brand" value="{{ form.brand }}">
+    <p class="label"><label><input type="checkbox" name="discard_pending"> Bu taramadaki bekleyen önerileri silip yeniden üret</label></p>
+    <p class="label"><label><input type="checkbox" name="discard_rejected"> Reddedilenleri de yeniden üret</label></p>
+    <button type="submit" class="primary">Önerileri üret</button>
+    <p class="meta">Ollama'nın açık olması gerekir. Onaylanmış kayıtlara dokunulmaz.</p>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

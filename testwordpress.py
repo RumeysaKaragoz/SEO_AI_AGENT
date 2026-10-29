@@ -33,9 +33,14 @@ class FakeWP(BaseHTTPRequestHandler):
         if not self._authorized():
             return self._send(401, {"code": "rest_forbidden"})
         parsed = urlparse(self.path)
+        if parsed.path == "/wp-json/wp/v2/users/me":
+            return self._send(200, {"id": 1, "name": "Editor"})
         m = re.fullmatch(r"/wp-json/wp/v2/(pages|posts)", parsed.path)
         if not m:
             return self._send(404, {"code": "rest_no_route"})
+        if "slug" not in parse_qs(parsed.query):       # liste (check)
+            pages = [{"id": 5, "meta": {k: "" for k in FakeWP.registered}}] if m.group(1) == "pages" else []
+            return self._send(200, pages)
         slug = parse_qs(parsed.query)["slug"][0]
         port = self.server.server_address[1]
         found = FakeWP.content.get(m.group(1), {}).get(slug, [])
@@ -128,6 +133,14 @@ def main():
     expect_error(lambda: wp.apply(change(base + "/hakkimizda", "h1")), "desteklenmiyor")
     assert FakeWP.posts == [], "hata durumlarında yazma isteği gitmemeli"
     print("OK  yanlış parola / bulunamayan sayfa / ana sayfa / başka site / desteklenmeyen alan: yazma isteği gitmedi")
+
+    reset()
+    assert wp.check() == ("Editor", True)
+    reset(registered=())
+    assert wp.check() == ("Editor", False)
+    expect_error(lambda: WordPressPublisher(base, USER, "yanlis", "yoast").check(), "kimlik doğrulaması")
+    print("OK  check(): kullanıcı adı ve SEO alanlarının REST'e açık olup olmadığı; yanlış parola hata verir")
+    reset()
 
     try:
         WordPressPublisher(base, USER, PASSWORD, "bilinmeyen")
