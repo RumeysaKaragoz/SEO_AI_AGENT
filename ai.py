@@ -357,7 +357,7 @@ def _latest_run_id(conn):
 
 
 def generate_suggestions(db_path=DB_PATH, run_id=None, limit=5, model=DEFAULT_MODEL,
-                         brand=None, chat=ollama_chat, discard_pending=False, discard_rejected=False):
+                         brand=None, chat=ollama_chat, discard_pending=False, discard_rejected=False, only_urls=None):
     """discard_pending / discard_rejected: bu taramadaki BEKLEYEN ve/veya REDDEDİLMİŞ önerileri silip
     yeniden üretir. Reddedilmiş kayıt silinmedikçe o alan yeniden üretilmez. Onaylanmış ve
     uygulanmış kayıtlara hiçbir zaman dokunulmaz."""
@@ -408,6 +408,8 @@ def generate_suggestions(db_path=DB_PATH, run_id=None, limit=5, model=DEFAULT_MO
             if summary["pages"] >= limit:
                 break
             page = entry["page"]
+            if only_urls is not None and page["url"] not in only_urls:
+                continue
             todo = {
                 field: issues for field, issues in entry["fields"].items()
                 if conn.execute("SELECT 1 FROM applied_changes WHERE page_id = ? AND change_type = ?",
